@@ -1,0 +1,15 @@
+{
+  "name": "unnos", 
+  "version": "1.0.0",
+  "workspaces": [
+    "web",
+    "bot"
+  ],
+  "scripts": {
+    "dev:web": "bun -F ./web dev",
+    "dev:bot": "bun -F ./bot dev"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
