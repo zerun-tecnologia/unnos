@@ -24,16 +24,21 @@ client.on(Events.GuildAvailable, async (guild) => {
     name: guild.name,
   }
 
-  const users = guild.members.cache.map((member) => ({
-    id: member.id,
-    username: member.user.username,
-  }))
-
-  await prisma.guild.upsert({
+  const guildCreated = await prisma.guild.upsert({
     where: { id: guild.id },
     update: data,
     create: data,
   })
+
+  const users = guild.members.cache.map((member) => ({
+    id: member.id,
+    username: member.user.username,
+    guilds: {
+      connect: {
+        id: guildCreated.id,
+      },
+    },
+  }))
 
   await prisma.user.createMany({
     data: users,
@@ -47,7 +52,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const command = commands.get(interaction.commandName)
 
   if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`)
+    console.error(`Nenhuma função encontrada para o comando ${interaction.commandName}`)
     return
   }
 
@@ -57,12 +62,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
     console.error(error)
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp({
-        content: 'There was an error while executing this command!',
+        content: 'Ocorreu um erro ao executar este comando!',
         flags: MessageFlags.Ephemeral,
       })
     } else {
       await interaction.reply({
-        content: 'There was an error while executing this command!',
+        content: 'Ocorreu um erro ao executar este comando!',
         flags: MessageFlags.Ephemeral,
       })
     }

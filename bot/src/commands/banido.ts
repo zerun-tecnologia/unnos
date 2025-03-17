@@ -1,6 +1,5 @@
 import {
   ChatInputCommandInteraction,
-  MessageFlags,
   SlashCommandBuilder,
   type CacheType,
 } from 'discord.js'
@@ -8,12 +7,12 @@ import { prisma } from '../db'
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('ganhou')
-    .setDescription('Registra uma vitória')
+    .setName('banido')
+    .setDescription('Registra um banido')
     .addUserOption((option) =>
       option
         .setName('user')
-        .setDescription('Usuário a ser registrado')
+        .setDescription('Usuário que foi banido')
         .setRequired(true),
     )
     .toJSON(),
@@ -24,8 +23,8 @@ export default {
 
       if (!guild || !user) {
         await interaction.reply({
-          content: 'Não foi possível registrar a vitória.',
-          
+          content: 'Não foi possível registrar o banido.',
+          ephemeral: true,
         })
         return
       }
@@ -40,8 +39,8 @@ export default {
       if (!latestMatch) {
         await interaction.reply({
           content:
-            'É necessário iniciar uma partida antes de registrar uma vitória.',
-          
+            'É necessário iniciar uma partida antes de registrar um banido.',
+          ephemeral: true,
         })
         return
       }
@@ -54,16 +53,10 @@ export default {
           update: {
             username: user.username,
             id: user.id,
-            
           },
           create: {
             username: user.username,
             id: user.id,  
-            guilds: {
-              connect: {
-                id: guild.id,
-              },
-            },
           },
         }),
         await tx.match.update({
@@ -71,18 +64,22 @@ export default {
             id: latestMatch.id,
           },
           data: {
-            winnerId: user.id,
+            banned: {
+              connect: {
+                id: user.id,
+              } 
+            }
           }
         })
       ]))
-
       await interaction.reply({
-        content: 'Vitória registrada com sucesso!',
+        content: 'Banido registrado com sucesso!',
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
-        content: 'Não foi possível registrar a vitória.',
+        content: 'Não foi possível registrar quem deu a partida.',
+        ephemeral: true,
       })
     }
   },

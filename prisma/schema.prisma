@@ -13,6 +13,7 @@ datasource db {
 model User {
   id                  String  @id
   username            String  @unique
+  guilds              Guild[] @relation(name: "user_guilds")
   matches_winner      Match[] @relation(name: "match_winner")
   matches_participant Match[] @relation(name: "match_participants")
   matches_banned      Match[] @relation(name: "match_banned")
@@ -23,6 +24,7 @@ model Guild {
   id      String  @id
   name    String
   matches Match[]
+  users   User[]  @relation(name: "user_guilds")
 }
 
 model Match {

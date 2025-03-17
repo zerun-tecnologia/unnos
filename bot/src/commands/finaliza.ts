@@ -7,20 +7,19 @@ import { prisma } from '../db'
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('nova')
-    .setDescription('Registra uma partida')
+    .setName('finaliza')
+    .setDescription('Finaliza uma partida')
     .addStringOption((option) =>
       option.setName('nome').setDescription('Nome da partida'),
     )
     .toJSON(),
   async execute(interaction: ChatInputCommandInteraction<CacheType>) {
     try {
-      const nome = interaction.options.getString('nome')
       const guild = interaction.guild
 
       if (!guild) {
         await interaction.reply({
-          content: 'Não foi possível registrar a partida.',
+          content: 'Não foi possível finalizar a partida.',
           ephemeral: true,
         })
         return
@@ -33,33 +32,31 @@ export default {
         },
       })
 
-      if (lastedOpenMatch) {
-        await prisma.match.update({
-          where: {
-            id: lastedOpenMatch.id,
-          },
-          data: {
-            status: 'closed',
-          },
+      if (!lastedOpenMatch) {
+        await interaction.reply({
+          content: 'Não há partidas abertas.',
+          ephemeral: true,
         })
+        return
       }
 
-      await prisma.match.create({
+      await prisma.match.update({
+        where: {
+          id: lastedOpenMatch.id,
+        },
         data: {
-          name: nome,
-          guildId: guild.id,
-          status: 'open',
+          status: 'closed',
         },
       })
 
       await interaction.reply({
-        content: 'Partida registrada com sucesso!',
+        content: 'Partida finalizada com sucesso!',
         ephemeral: true,
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
-        content: 'Não foi possível registrar a vitória.',
+        content: 'Não foi possível finalizar a partida.',
         ephemeral: true,
       })
     }
