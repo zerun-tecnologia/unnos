@@ -1,0 +1,17 @@
+FROM oven/bun:1
+
+RUN apt-get update -y && apt-get install -y openssl
+
+RUN bun add -g prisma
+
+WORKDIR /app
+
+COPY . .
+
+RUN rm -rf web
+
+RUN bun install --frozen-lockfile --production
+
+RUN bunx prisma generate
+
+CMD ["bun", "run", "start:bot"]

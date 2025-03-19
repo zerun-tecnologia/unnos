@@ -49,12 +49,12 @@ export default {
         return
       }
 
-      const ids = [...latestMatch.banned.map((user) => user.id),latestMatch.winner?.id]
-      
+      const ids = [...latestMatch.banned.map((user) => user.id), latestMatch.winner?.id]
+
       if (ids.includes(user.id)) {
         await interaction.reply({
           content: 'Este usuário foi banido ou ganhou a partida.',
-          
+
         })
         return
       }
@@ -66,11 +66,19 @@ export default {
           },
           update: {
             username: user.username,
-            id: user.id,
+            id: user.id, guilds: {
+              connect: {
+                id: guild.id,
+              }
+            }
           },
           create: {
             username: user.username,
-            id: user.id,  
+            id: user.id, guilds: {
+              connect: {
+                id: guild.id,
+              }
+            }
           },
         }),
         await tx.match.update({
@@ -81,7 +89,7 @@ export default {
             gave: {
               connect: {
                 id: user.id,
-              } 
+              }
             }
           }
         })

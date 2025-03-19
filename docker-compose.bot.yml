@@ -1,0 +1,33 @@
+services:
+  bot:
+    container_name: unnos-bot
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    image: unnos-bot
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@localhost:5434/postgres
+
+  postgres:
+    container_name: unnos-pg
+    image: postgres
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGDATA: /data/postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - unnos-pg:/data/postgres
+
+volumes:
+  unnos-pg:
+    external: true

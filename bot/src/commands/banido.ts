@@ -67,10 +67,20 @@ export default {
           update: {
             username: user.username,
             id: user.id,
+            guilds: {
+              connect: {
+                id: guild.id,
+              }
+            }
           },
           create: {
             username: user.username,
             id: user.id,  
+            guilds: {
+              connect: {
+                id: guild.id,
+              }
+            }
           },
         }),
         await tx.match.update({

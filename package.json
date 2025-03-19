@@ -7,7 +7,9 @@
   ],
   "scripts": {
     "dev:web": "bun -F ./web dev",
-    "dev:bot": "bun -F ./bot dev"
+    "start:web": "bun -F ./web start",
+    "dev:bot": "bun -F ./bot dev",
+    "start:bot": "bun -F ./bot start"
   },
   "peerDependencies": {
     "typescript": "^5"
