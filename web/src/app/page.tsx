@@ -2,6 +2,8 @@ import { Chart } from '@/components/chart'
 import { Button } from '@heroui/react'
 import { EChartsOption } from 'echarts/types/dist/echarts'
 import Image from 'next/image'
+import { Suspense } from 'react'
+import { ListUsers } from './list-users'
 
 export default function Home() {
   const chartOptions: EChartsOption = {
@@ -28,6 +30,9 @@ export default function Home() {
           options={chartOptions}
           className="w-[400px] h-96"
         />
+        <Suspense fallback="Loading...">
+          <ListUsers />
+        </Suspense>
         <Image
           className="dark:invert"
           src="/next.svg"
