@@ -134,15 +134,18 @@ export default {
         }
       })
 
+
       await interaction.reply({
         embeds: [{
           title: 'Ranking de usuários',
           color: 0x0099ff,
           description: 'Vitórias | Dadas | Bans',
-          fields: ranking.map((user) => {
+          fields: ranking.filter(user => {
+            return user.matches_winner.length > 0 || user.matches_gave.length > 0 || user.matches_banned.length > 0
+          }).map((user) => {
             return {
               name: user.username,
-              value: `${String(user.matches_winner.length).padEnd(3,'')} | ${String(user.matches_gave.length).padEnd(3,'')} | ${String(user.matches_banned.length).padEnd(3,'')}`,
+              value: `${String(user.matches_winner.length).padEnd(3, '')} | ${String(user.matches_gave.length).padEnd(3, '')} | ${String(user.matches_banned.length).padEnd(3, '')}`,
               inline: false,
             }
           }),
