@@ -21,9 +21,6 @@ export default {
       if (!guild) {
         await interaction.reply({
           content: 'Não foi possível finalizar a partida.',
-          flags: [
-            MessageFlags.Ephemeral
-          ],
         })
         return
       }
@@ -38,9 +35,6 @@ export default {
       if (!lastedOpenMatch) {
         await interaction.reply({
           content: 'Não há partidas abertas.',
-          flags: [
-            MessageFlags.Ephemeral
-          ],
         })
         return
       }
@@ -56,17 +50,11 @@ export default {
 
       await interaction.reply({
         content: 'Partida finalizada com sucesso!',
-        flags: [
-            MessageFlags.Ephemeral
-          ],
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível finalizar a partida.',
-        flags: [
-            MessageFlags.Ephemeral
-          ],
       })
     }
   },

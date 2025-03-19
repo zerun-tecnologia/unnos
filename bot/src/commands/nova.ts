@@ -22,9 +22,6 @@ export default {
       if (!guild) {
         await interaction.reply({
           content: 'Não foi possível registrar a partida.',
-          flags: [
-            MessageFlags.Ephemeral
-          ],
         })
         return
       }
@@ -57,17 +54,11 @@ export default {
 
       await interaction.reply({
         content: 'Partida registrada com sucesso!',
-        flags: [
-            MessageFlags.Ephemeral
-          ],
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível registrar a vitória.',
-        flags: [
-            MessageFlags.Ephemeral
-          ],
       })
     }
   },

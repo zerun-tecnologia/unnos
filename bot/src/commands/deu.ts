@@ -25,9 +25,6 @@ export default {
       if (!guild || !user) {
         await interaction.reply({
           content: 'Não foi possível registrar quem deu a partida.',
-          flags: [
-            MessageFlags.Ephemeral
-          ],
         })
         return
       }
@@ -48,9 +45,6 @@ export default {
         await interaction.reply({
           content:
             'É necessário iniciar uma partida antes de registrar quem deu a partida.',
-          flags: [
-            MessageFlags.Ephemeral
-          ],
         })
         return
       }
@@ -100,9 +94,6 @@ export default {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível registrar quem deu a partida.',
-        flags: [
-            MessageFlags.Ephemeral
-          ],
       })
     }
   },

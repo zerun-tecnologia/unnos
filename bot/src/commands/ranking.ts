@@ -107,9 +107,6 @@ export default {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível registrar a vitória.',
-        flags: [
-          MessageFlags.Ephemeral
-        ]
       })
     }
   },

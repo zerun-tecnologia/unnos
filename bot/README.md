@@ -12,6 +12,8 @@ To run:
 bun run index.ts
 ```
 
+https://discord.com/oauth2/authorize?client_id=1346877543042519110&permissions=2147560448&integration_type=0&scope=applications.commands+bot
+
 This project was created using `bun init` in bun v1.2.3. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
 
 https://discordjs.guide/#before-you-begin
