@@ -9,6 +9,8 @@ services:
     image: unnos-web
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+    networks:
+      - default
 
   bot:
     container_name: unnos-bot
@@ -18,6 +20,8 @@ services:
     image: unnos-bot
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+    networks:
+      - default
 
   postgres:
     container_name: unnos-pg
@@ -34,6 +38,11 @@ services:
       retries: 5
     volumes:
       - unnos-pg:/data/postgres
+    networks:
+      - default
 
 volumes:
   unnos-pg:
+
+networks:
+  default:
