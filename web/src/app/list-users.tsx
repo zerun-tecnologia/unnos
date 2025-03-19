@@ -25,13 +25,15 @@ export async function ListUsers() {
 
   return (
     <>
-      <ul>
+      <ul className="space-y-4">
         {users.map((user) => (
           <li key={user.id}>
             <p>{user.username}</p>
-            <p>Vitórias: {user.matches_winner.length}</p>
-            <p>Bans: {user.matches_banned.length}</p>
-            <p>Dadas: {user.matches_gave.length}</p>
+            <div className="grid grid-cols-3">
+              <p>Vitórias: {user.matches_winner.length}</p>
+              <p>Bans: {user.matches_banned.length}</p>
+              <p>Dadas: {user.matches_gave.length}</p>
+            </div>
           </li>
         ))}
       </ul>
