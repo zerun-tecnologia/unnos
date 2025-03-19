@@ -1,5 +1,8 @@
 FROM ghcr.io/railwayapp/nixpacks:ubuntu-1741046653
 
+ARG DATABASE_URL
+ENV DATABASE_URL ${DATABASE_URL}
+
 ENTRYPOINT ["/bin/bash", "-l", "-c"]
 WORKDIR /app/
 

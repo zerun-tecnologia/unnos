@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: ./web/.nixpacks/Dockerfile
+      args:
+        - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
     image: unnos-web
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
