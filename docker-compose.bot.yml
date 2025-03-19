@@ -5,10 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile.bot
     image: unnos-bot
-    env_file:
-      - .env
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
 
   postgres:
     container_name: unnos-pg
