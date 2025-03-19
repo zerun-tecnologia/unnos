@@ -29,7 +29,7 @@ export async function ListUsers() {
         {users.map((user) => (
           <li key={user.id}>
             <p>{user.username}</p>
-            <div className="grid grid-cols-3">
+            <div className="grid grid-cols-3 gap-4 w-full">
               <p>Vitórias: {user.matches_winner.length}</p>
               <p>Bans: {user.matches_banned.length}</p>
               <p>Dadas: {user.matches_gave.length}</p>
