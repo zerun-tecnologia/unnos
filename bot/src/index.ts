@@ -25,7 +25,7 @@ client.on(Events.GuildAvailable, async (guild) => {
     name: guild.name,
   }
 
-  const guildCreated = await prisma.guild.upsert({
+  await prisma.guild.upsert({
     where: { id: guild.id },
     update: data,
     create: data,
