@@ -8,13 +8,11 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@localhost:5434/postgres
+      - DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
 
   postgres:
     container_name: unnos-pg
     image: postgres
-    ports:
-      - 5434:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
