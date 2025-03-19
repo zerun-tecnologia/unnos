@@ -17,7 +17,7 @@ ENV CI=$CI NIXPACKS_METADATA=$NIXPACKS_METADATA NODE_ENV=$NODE_ENV NPM_CONFIG_PR
 # install phase
 ENV NIXPACKS_PATH=/app/node_modules/.bin:$NIXPACKS_PATH
 COPY . /app/.
-RUN --mount=type=cache,id=n1juX80NWQ4-/root/npm,target=/root/.npm bun i --filter ./web --no-save
+RUN --mount=type=cache,id=n1juX80NWQ4-/root/bun/install/cache,target=/root/.bun/install/cache bun i --filter ./web
 
 # build phase
 COPY . /app/.

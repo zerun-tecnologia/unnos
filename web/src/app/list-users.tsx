@@ -1,5 +1,4 @@
-import { prisma } from '@/database/prisma'
-import { user } from '@heroui/react'
+import { prisma } from '@/lib/prisma'
 
 export async function ListUsers() {
   const users = await prisma.user.findMany({
