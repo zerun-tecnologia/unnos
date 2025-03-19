@@ -8,6 +8,7 @@
   "scripts": {
     "dev:web": "bun -F ./web dev",
     "start:web": "bun -F ./web start",
+    "build:web": "bun -F ./web build",
     "dev:bot": "bun -F ./bot dev",
     "start:bot": "bun -F ./bot start"
   },

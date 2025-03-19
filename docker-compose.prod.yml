@@ -1,4 +1,15 @@
 services:
+  web:
+    container_name: unnos-web
+    build:
+      context: .
+      dockerfile: ./web/.nixpacks/Dockerfile
+    image: unnos-web
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+
   bot:
     container_name: unnos-bot
     build:
