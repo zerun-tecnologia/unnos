@@ -14,7 +14,7 @@ export default {
       option
         .setName('user')
         .setDescription('Usuário que deseja ver o ranking')
-        .setRequired(true),
+        .setRequired(false),
     )
     .toJSON(),
   async execute(interaction: ChatInputCommandInteraction<CacheType>) {
@@ -73,7 +73,7 @@ export default {
           },
         })
 
-        
+
         await interaction.reply({
           embeds: [
             {
@@ -102,7 +102,55 @@ export default {
             MessageFlags.Ephemeral
           ]
         })
+
+        return
       }
+
+      const ranking = await prisma.user.findMany({
+        where: {
+          guilds: {
+            some: {
+              id: guild.id,
+            },
+          }
+        },
+        select: {
+          username: true,
+          matches_winner: {
+            select: {
+              id: true,
+            },
+          },
+          matches_banned: {
+            select: {
+              id: true,
+            },
+          },
+          matches_gave: {
+            select: {
+              id: true,
+            }
+          }
+        }
+      })
+
+      await interaction.reply({
+        embeds: [{
+          title: 'Ranking de usuários',
+          color: 0x0099ff,
+          description: 'Vitórias | Dadas | Bans',
+          fields: ranking.map((user) => {
+            return {
+              name: user.username,
+              value: `${String(user.matches_winner.length).padEnd(3,'')} | ${String(user.matches_gave.length).padEnd(3,'')} | ${String(user.matches_banned.length).padEnd(3,'')}`,
+              inline: false,
+            }
+          }),
+        }],
+        flags: [
+          MessageFlags.Ephemeral
+        ]
+      })
     } catch (error) {
       console.error(error)
       await interaction.reply({
