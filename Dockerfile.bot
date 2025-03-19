@@ -12,4 +12,4 @@ RUN bun install --filter ./bot
 
 RUN bunx prisma generate
 
-CMD ["bunx","prisma","migrate","deploy", "&&", "bun", "run", "start:bot"]
+CMD ["bun", "run", "start:bot"]
