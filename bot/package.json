@@ -25,6 +25,7 @@
   "dependencies": {
     "@prisma/client": "^6.4.1",
     "discord.js": "^14.18.0",
+    "discordjs-logger": "^5.0.0",
     "dotenv": "^16.4.7",
     "valibot": "^1.0.0-rc.3"
   },

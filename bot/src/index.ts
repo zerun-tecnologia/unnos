@@ -5,6 +5,7 @@ import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js'
 import './rest'
 import { prisma } from './db'
 import { commands } from './commands'
+import DiscordEventHandler from 'discordjs-logger'
 
 const client = new Client({
   intents: [
@@ -14,6 +15,8 @@ const client = new Client({
     GatewayIntentBits.GuildMembers,
   ],
 })
+
+const logger = new DiscordEventHandler(client);
 
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`Logged in as ${readyClient.user.tag}!`)
@@ -84,5 +87,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
   }
 })
+
+logger.logAllEvents()
 
 client.login(env.TOKEN)
