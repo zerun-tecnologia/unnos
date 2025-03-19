@@ -1,5 +1,6 @@
 import {
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
   type CacheType,
 } from 'discord.js'
@@ -16,8 +17,10 @@ export default {
 
       if (!guild) {
         await interaction.reply({
-          content: 'Não foi possível registrar o banido.',
-          ephemeral: true,
+          content: 'Não foi possível registrar os participantes.',
+          flags: [
+            MessageFlags.Ephemeral
+          ],
         })
         return
       }
@@ -32,20 +35,24 @@ export default {
       if (!latestMatch) {
         await interaction.reply({
           content:
-            'É necessário iniciar uma partida antes de registrar um banido.',
-          ephemeral: true,
+            'É necessário iniciar uma partida antes de registrar os participantes.',
+          flags: [
+            MessageFlags.Ephemeral
+          ],
         })
         return
       }
 
       await interaction.reply({
-        content: 'Banido registrado com sucesso!',
+        content: 'Participantes registrados com sucesso!',
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
-        content: 'Não foi possível registrar quem deu a partida.',
-        ephemeral: true,
+        content: 'Não foi possível registrar os participantes.',
+        flags: [
+            MessageFlags.Ephemeral
+          ],
       })
     }
   },

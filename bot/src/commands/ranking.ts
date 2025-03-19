@@ -1,5 +1,6 @@
 import {
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
   type CacheType,
 } from 'discord.js'
@@ -24,7 +25,9 @@ export default {
       if (!guild) {
         await interaction.reply({
           content: 'Não foi possível ver o ranking.',
-          ephemeral: true,
+          flags: [
+            MessageFlags.Ephemeral
+          ]
         })
         return
       }
@@ -39,7 +42,9 @@ export default {
         if (!userRanking) {
           await interaction.reply({
             content: 'Usuário não encontrado.',
-            ephemeral: true,
+            flags: [
+              MessageFlags.Ephemeral
+            ]
           })
           return
         }
@@ -68,23 +73,43 @@ export default {
           },
         })
 
-        const rankingMessage = `
-        **Ranking de ${user.username}**
-        **Vitórias:** ${wins.length}
-        **Derrotas:** ${gaves.length}
-        **Bans:** ${bans.length}
-        `
-
+        
         await interaction.reply({
-          content: rankingMessage,
-          ephemeral: true,
+          embeds: [
+            {
+              title: `Ranking de ${user.username}`,
+              color: 0x0099ff,
+              fields: [
+                {
+                  name: 'Vitórias',
+                  value: wins.length.toString(),
+                  inline: true,
+                },
+                {
+                  name: 'Dadas',
+                  value: gaves.length.toString(),
+                  inline: true,
+                },
+                {
+                  name: 'Bans',
+                  value: bans.length.toString(),
+                  inline: true,
+                },
+              ],
+            },
+          ],
+          flags: [
+            MessageFlags.Ephemeral
+          ]
         })
       }
     } catch (error) {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível registrar a vitória.',
-        ephemeral: true,
+        flags: [
+          MessageFlags.Ephemeral
+        ]
       })
     }
   },

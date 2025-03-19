@@ -1,5 +1,6 @@
 import {
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
   type CacheType,
 } from 'discord.js'
@@ -21,7 +22,9 @@ export default {
       if (!guild) {
         await interaction.reply({
           content: 'Não foi possível registrar a partida.',
-          ephemeral: true,
+          flags: [
+            MessageFlags.Ephemeral
+          ],
         })
         return
       }
@@ -54,13 +57,17 @@ export default {
 
       await interaction.reply({
         content: 'Partida registrada com sucesso!',
-        ephemeral: true,
+        flags: [
+            MessageFlags.Ephemeral
+          ],
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível registrar a vitória.',
-        ephemeral: true,
+        flags: [
+            MessageFlags.Ephemeral
+          ],
       })
     }
   },

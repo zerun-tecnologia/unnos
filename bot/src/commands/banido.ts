@@ -1,5 +1,6 @@
 import {
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
   type CacheType,
 } from 'discord.js'
@@ -24,7 +25,9 @@ export default {
       if (!guild || !user) {
         await interaction.reply({
           content: 'Não foi possível registrar o banido.',
-          ephemeral: true,
+          flags: [
+            MessageFlags.Ephemeral
+          ],
         })
         return
       }
@@ -34,13 +37,32 @@ export default {
           guildId: guild.id,
           status: 'open',
         },
+        select: {
+          id: true,
+          winner: true,
+          gave: true
+        }
       })
 
       if (!latestMatch) {
         await interaction.reply({
           content:
             'É necessário iniciar uma partida antes de registrar um banido.',
-          ephemeral: true,
+          flags: [
+            MessageFlags.Ephemeral
+          ],
+        })
+        return
+      }
+
+      const ids = [...latestMatch.gave.map((user) => user.id),latestMatch.winner?.id]
+      
+      if (ids.includes(user.id)) {
+        await interaction.reply({
+          content: 'Este usuário deu ou ganhou a partida.',
+          flags: [
+            MessageFlags.Ephemeral
+          ]
         })
         return
       }
@@ -74,12 +96,17 @@ export default {
       ]))
       await interaction.reply({
         content: 'Banido registrado com sucesso!',
+        flags: [
+          MessageFlags.Ephemeral
+        ]
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível registrar quem deu a partida.',
-        ephemeral: true,
+        flags: [
+            MessageFlags.Ephemeral
+          ],
       })
     }
   },

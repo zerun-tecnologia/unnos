@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run src/index.ts --watch",
+    "dev": "bun run src/index.ts --watch ./src",
     "start": "bun src/index.ts",
     "db:push": "prisma db push --force-reset",
     "db:generate": "prisma generate",

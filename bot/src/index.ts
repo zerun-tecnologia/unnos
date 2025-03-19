@@ -11,6 +11,7 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
   ],
 })
 
@@ -30,20 +31,30 @@ client.on(Events.GuildAvailable, async (guild) => {
     create: data,
   })
 
-  const users = guild.members.cache.map((member) => ({
-    id: member.id,
-    username: member.user.username,
-    guilds: {
-      connect: {
-        id: guildCreated.id,
-      },
-    },
-  }))
+  const users = await guild.members.list()
 
-  await prisma.user.createMany({
-    data: users,
-    skipDuplicates: true,
-  })
+  for (const {"1": user} of users) {
+    await prisma.user.upsert({
+      where: {
+        id: user.id
+      },
+      create: {
+        id: user.id,
+        username: user.user.username,
+        guilds: {
+          connect:{ id: guild.id}
+        }
+      },
+      update: {
+        username: user.user.username,
+        guilds: {
+          connect: { id: guild.id }
+        }
+      }
+    })
+  }
+
+  
 })
 
 client.on(Events.InteractionCreate, async (interaction) => {

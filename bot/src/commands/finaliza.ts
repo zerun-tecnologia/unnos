@@ -1,5 +1,6 @@
 import {
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
   type CacheType,
 } from 'discord.js'
@@ -20,7 +21,9 @@ export default {
       if (!guild) {
         await interaction.reply({
           content: 'Não foi possível finalizar a partida.',
-          ephemeral: true,
+          flags: [
+            MessageFlags.Ephemeral
+          ],
         })
         return
       }
@@ -35,7 +38,9 @@ export default {
       if (!lastedOpenMatch) {
         await interaction.reply({
           content: 'Não há partidas abertas.',
-          ephemeral: true,
+          flags: [
+            MessageFlags.Ephemeral
+          ],
         })
         return
       }
@@ -51,13 +56,17 @@ export default {
 
       await interaction.reply({
         content: 'Partida finalizada com sucesso!',
-        ephemeral: true,
+        flags: [
+            MessageFlags.Ephemeral
+          ],
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível finalizar a partida.',
-        ephemeral: true,
+        flags: [
+            MessageFlags.Ephemeral
+          ],
       })
     }
   },

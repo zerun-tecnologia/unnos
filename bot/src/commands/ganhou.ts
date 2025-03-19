@@ -25,7 +25,9 @@ export default {
       if (!guild || !user) {
         await interaction.reply({
           content: 'Não foi possível registrar a vitória.',
-          
+          flags: [
+            MessageFlags.Ephemeral
+          ]
         })
         return
       }
@@ -35,13 +37,32 @@ export default {
           guildId: guild.id,
           status: 'open',
         },
+        select: {
+          id: true,
+          banned: true,
+          gave: true
+        }
       })
 
       if (!latestMatch) {
         await interaction.reply({
           content:
             'É necessário iniciar uma partida antes de registrar uma vitória.',
-          
+            flags: [
+              MessageFlags.Ephemeral
+            ]
+        })
+        return
+      }
+
+      const ids = [...latestMatch.banned.map((user) => user.id), ...latestMatch.gave.map((user) => user.id)]
+
+      if (ids.includes(user.id)) {
+        await interaction.reply({
+          content: 'Este usuário foi banido ou deu a partida.',
+          flags: [
+            MessageFlags.Ephemeral
+          ]          
         })
         return
       }
@@ -78,11 +99,17 @@ export default {
 
       await interaction.reply({
         content: 'Vitória registrada com sucesso!',
+        flags: [
+          MessageFlags.Ephemeral
+        ]
       })
     } catch (error) {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível registrar a vitória.',
+        flags: [
+          MessageFlags.Ephemeral
+        ]
       })
     }
   },
