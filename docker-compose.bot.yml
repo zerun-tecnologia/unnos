@@ -30,4 +30,3 @@ services:
 
 volumes:
   unnos-pg:
-    external: true
