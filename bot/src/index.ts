@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { env } from 'bun'
-import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js'
+import { ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageFlags, type CacheType } from 'discord.js'
 import './rest'
 import { prisma } from './db'
 import { commands } from './commands'
@@ -19,8 +19,9 @@ const client = new Client({
 const logger = new DiscordEventHandler(client);
 
 logger.registerEvents([
-  Events.MessageCreate,
-  Events.InteractionCreate
+  [Events.InteractionCreate,(interaction: any) => {
+    console.log(`Mensagem de interação criada: ${interaction.id} | ${interaction.commandName} - ${interaction.guild?.name} | ${interaction.user.username} `)
+  }]
 ])
 
 client.once(Events.ClientReady, (readyClient) => {
