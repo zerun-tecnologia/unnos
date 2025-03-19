@@ -18,6 +18,11 @@ const client = new Client({
 
 const logger = new DiscordEventHandler(client);
 
+logger.registerEvents([
+  Events.MessageCreate,
+  Events.InteractionCreate
+])
+
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`Logged in as ${readyClient.user.tag}!`)
 })
@@ -87,7 +92,4 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
   }
 })
-
-logger.logAllEvents()
-
 client.login(env.TOKEN)
