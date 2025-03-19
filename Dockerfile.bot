@@ -8,9 +8,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN rm -rf web
-
-RUN bun install --frozen-lockfile --production
+RUN bun install --filter ./bot
 
 RUN bunx prisma generate
 
