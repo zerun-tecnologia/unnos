@@ -11,13 +11,13 @@ datasource db {
 }
 
 model User {
-  id                  String  @id
-  username            String  @unique
-  guilds              Guild[] @relation(name: "user_guilds")
-  matches_winner      Match[] @relation(name: "match_winner")
-  matches_participant Match[] @relation(name: "match_participants")
-  matches_banned      Match[] @relation(name: "match_banned")
-  matches_gave        Match[] @relation(name: "match_gave")
+  id                  String        @id
+  username            String        @unique
+  guilds              Guild[]       @relation(name: "user_guilds")
+  matches_winner      Match[]       @relation(name: "match_winner")
+  matches_participant Match[]       @relation(name: "match_participants")
+  matches_banned      MatchBanned[] @relation(name: "match_banned")
+  matches_gave        Match[]       @relation(name: "match_gave")
 }
 
 model Guild {
@@ -27,17 +27,26 @@ model Guild {
   users   User[]  @relation(name: "user_guilds")
 }
 
+model MatchBanned {
+  id      Int    @id @default(autoincrement())
+  matchId Int
+  match   Match  @relation(name: "match_banned", fields: [matchId], references: [id])
+  userId  String
+  user    User   @relation(name: "match_banned", fields: [userId], references: [id])
+  count   Int
+}
+
 model Match {
-  id           String    @id @default(cuid())
+  id           Int           @id @default(autoincrement())
   name         String?
   guildId      String
-  guild        Guild     @relation(fields: [guildId], references: [id])
-  participants User[]    @relation(name: "match_participants")
-  banned       User[]    @relation(name: "match_banned")
-  gave         User[]    @relation(name: "match_gave")
-  winner       User?     @relation(name: "match_winner", fields: [winnerId], references: [id])
+  guild        Guild         @relation(fields: [guildId], references: [id])
+  participants User[]        @relation(name: "match_participants")
+  banned       MatchBanned[] @relation(name: "match_banned")
+  gave         User[]        @relation(name: "match_gave")
+  winner       User?         @relation(name: "match_winner", fields: [winnerId], references: [id])
   winnerId     String?
-  status       String    @default("open")
-  createdAt    DateTime  @default(now())
+  status       String        @default("open")
+  createdAt    DateTime      @default(now())
   finishedAt   DateTime?
 }
