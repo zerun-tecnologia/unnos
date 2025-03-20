@@ -1,10 +1,6 @@
-import { Chart } from '@/components/chart'
-import { Button } from '@heroui/react'
 import { EChartsOption } from 'echarts/types/dist/echarts'
-import Image from 'next/image'
 import { Suspense } from 'react'
 import { ListUsers } from './list-users'
-import { ListMatches } from './list-matches'
 
 export default function Home() {
   const chartOptions: EChartsOption = {
@@ -35,7 +31,7 @@ export default function Home() {
         </Suspense>
 
         <Suspense fallback="Loading...">
-          <ListMatches />
+          <ListUsers />
         </Suspense>
       </main>
     </div>
