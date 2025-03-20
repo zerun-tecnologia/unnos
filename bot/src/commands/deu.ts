@@ -37,8 +37,8 @@ export default {
         select: {
           id: true,
           banned: true,
-          winner: true
-        }
+          winner: true,
+        },
       })
 
       if (!latestMatch) {
@@ -49,36 +49,40 @@ export default {
         return
       }
 
-      const ids = [...latestMatch.banned.map((user) => user.id), latestMatch.winner?.id]
+      const ids = [
+        ...latestMatch.banned.map((user) => user.id),
+        latestMatch.winner?.id,
+      ]
 
       if (ids.includes(user.id)) {
         await interaction.reply({
-          content: 'Este usuário foi banido ou ganhou a partida.',
-
+          content: `${user.username} já foi banido ou ganhou a partida #${latestMatch.id}.`,
         })
         return
       }
 
-      await prisma.$transaction(async (tx) => ([
+      await prisma.$transaction(async (tx) => [
         await tx.user.upsert({
           where: {
             id: user.id,
           },
           update: {
             username: user.username,
-            id: user.id, guilds: {
+            id: user.id,
+            guilds: {
               connect: {
                 id: guild.id,
-              }
-            }
+              },
+            },
           },
           create: {
             username: user.username,
-            id: user.id, guilds: {
+            id: user.id,
+            guilds: {
               connect: {
                 id: guild.id,
-              }
-            }
+              },
+            },
           },
         }),
         await tx.match.update({
@@ -89,14 +93,14 @@ export default {
             gave: {
               connect: {
                 id: user.id,
-              }
-            }
-          }
-        })
-      ]))
+              },
+            },
+          },
+        }),
+      ])
 
       await interaction.reply({
-        content: 'Dado registrado com sucesso!',
+        content: `${user.username} deu a partida #${latestMatch.id}.`,
       })
     } catch (error) {
       console.error(error)

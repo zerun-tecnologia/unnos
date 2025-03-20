@@ -49,7 +49,7 @@ export default {
       })
 
       await interaction.reply({
-        content: 'Partida finalizada com sucesso!',
+        content: `Partida #${lastedOpenMatch.id} finalizada.`,
       })
     } catch (error) {
       console.error(error)

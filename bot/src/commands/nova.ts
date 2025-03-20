@@ -44,7 +44,7 @@ export default {
         })
       }
 
-      await prisma.match.create({
+      const match = await prisma.match.create({
         data: {
           name: nome,
           guildId: guild.id,
@@ -53,7 +53,7 @@ export default {
       })
 
       await interaction.reply({
-        content: 'Partida registrada com sucesso!',
+        content: `Partida #${match.id} registrada.`,
       })
     } catch (error) {
       console.error(error)

@@ -30,40 +30,37 @@ export default {
         select: {
           id: true,
           winner: true,
-          gave: true
-        }
+          gave: true,
+        },
       })
 
       if (!latestMatch) {
         await interaction.reply({
-          content:
-            'É necessário iniciar uma partida antes de limpar os dados.',
-      
+          content: 'É necessário iniciar uma partida antes de limpar os dados.',
         })
         return
       }
 
-      await prisma.$transaction(async (tx) => ([
-      
+      await prisma.$transaction(async (tx) => [
         await tx.match.update({
           where: {
             id: latestMatch.id,
           },
           data: {
             banned: {
-              deleteMany: {}
+              deleteMany: {},
             },
             gave: {
-              deleteMany: {}
+              deleteMany: {},
             },
             winner: {
-              disconnect: true
-            }
-          }
-        })
-      ]))
+              disconnect: true,
+            },
+          },
+        }),
+      ])
       await interaction.reply({
-        content: 'Dados da partida limpos com sucesso!',
+        content: `Partida #${latestMatch.id} limpa.`,
       })
     } catch (error) {
       console.error(error)
