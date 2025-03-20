@@ -28,15 +28,16 @@ model Guild {
 }
 
 model Match {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   name         String?
   guildId      String
-  guild        Guild    @relation(fields: [guildId], references: [id])
-  participants User[]   @relation(name: "match_participants")
-  banned       User[]   @relation(name: "match_banned")
-  gave         User[]   @relation(name: "match_gave")
-  winner       User?    @relation(name: "match_winner", fields: [winnerId], references: [id])
+  guild        Guild     @relation(fields: [guildId], references: [id])
+  participants User[]    @relation(name: "match_participants")
+  banned       User[]    @relation(name: "match_banned")
+  gave         User[]    @relation(name: "match_gave")
+  winner       User?     @relation(name: "match_winner", fields: [winnerId], references: [id])
   winnerId     String?
-  status       String   @default("open")
-  createdAt    DateTime @default(now())
+  status       String    @default("open")
+  createdAt    DateTime  @default(now())
+  finishedAt   DateTime?
 }

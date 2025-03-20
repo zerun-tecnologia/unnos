@@ -1,6 +1,7 @@
 import { EChartsOption } from 'echarts/types/dist/echarts'
 import { Suspense } from 'react'
 import { ListUsers } from './list-users'
+import { ListMatches } from './list-matches'
 
 export default function Home() {
   const chartOptions: EChartsOption = {
@@ -31,7 +32,7 @@ export default function Home() {
         </Suspense>
 
         <Suspense fallback="Loading...">
-          <ListUsers />
+          <ListMatches />
         </Suspense>
       </main>
     </div>

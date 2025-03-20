@@ -45,6 +45,7 @@ export default {
         },
         data: {
           status: 'closed',
+          finishedAt: new Date(),
         },
       })
 
