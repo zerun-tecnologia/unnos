@@ -7,6 +7,9 @@ services:
       args:
         - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
     image: unnos-web
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
     networks:
@@ -18,6 +21,10 @@ services:
       context: .
       dockerfile: Dockerfile.bot
     image: unnos-bot
+    command: /bin/bash -c "bunx prisma migrate deploy; bun run start:bot"
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
     networks:
