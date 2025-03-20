@@ -1,7 +1,14 @@
 import 'dotenv/config'
 
 import { env } from 'bun'
-import { ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageFlags, type CacheType } from 'discord.js'
+import {
+  ChatInputCommandInteraction,
+  Client,
+  Events,
+  GatewayIntentBits,
+  MessageFlags,
+  type CacheType,
+} from 'discord.js'
 import './rest'
 import { prisma } from './db'
 import { commands } from './commands'
@@ -16,12 +23,17 @@ const client = new Client({
   ],
 })
 
-const logger = new DiscordEventHandler(client);
+const logger = new DiscordEventHandler(client)
 
 logger.registerEvents([
-  [Events.InteractionCreate,(interaction: any) => {
-    console.log(`Mensagem de interação criada: ${interaction.id} | ${interaction.commandName} - ${interaction.guild?.name} | ${interaction.user.username} `)
-  }]
+  [
+    Events.InteractionCreate,
+    (interaction: any) => {
+      console.log(
+        `Mensagem de interação criada: ${interaction.id} | ${interaction.commandName} - ${interaction.guild?.name} | ${interaction.user.username} `,
+      )
+    },
+  ],
 ])
 
 client.once(Events.ClientReady, (readyClient) => {
@@ -42,28 +54,26 @@ client.on(Events.GuildAvailable, async (guild) => {
 
   const users = await guild.members.list()
 
-  for (const {"1": user} of users) {
+  for (const { '1': user } of users) {
     await prisma.user.upsert({
       where: {
-        id: user.id
+        id: user.id,
       },
       create: {
         id: user.id,
         username: user.user.username,
         guilds: {
-          connect:{ id: guild.id}
-        }
+          connect: { id: guild.id },
+        },
       },
       update: {
         username: user.user.username,
         guilds: {
-          connect: { id: guild.id }
-        }
-      }
+          connect: { id: guild.id },
+        },
+      },
     })
   }
-
-  
 })
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -72,7 +82,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const command = commands.get(interaction.commandName)
 
   if (!command) {
-    console.error(`Nenhuma função encontrada para o comando ${interaction.commandName}`)
+    console.error(
+      `Nenhuma função encontrada para o comando ${interaction.commandName}`,
+    )
     return
   }
 
