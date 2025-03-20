@@ -28,12 +28,13 @@ model Guild {
 }
 
 model MatchBanned {
-  id      Int    @id @default(autoincrement())
   matchId Int
   match   Match  @relation(name: "match_banned", fields: [matchId], references: [id])
   userId  String
   user    User   @relation(name: "match_banned", fields: [userId], references: [id])
   count   Int
+
+  @@id([matchId, userId])
 }
 
 model Match {

@@ -6,7 +6,11 @@ export async function ListMatches() {
       id: true,
       createdAt: true,
       finishedAt: true,
-      banned: true,
+      banned: {
+        select: {
+          user: true,
+        },
+      },
       gave: true,
       winner: true,
     },
@@ -42,7 +46,7 @@ export async function ListMatches() {
               </p>
               <p>
                 Banidos:{' '}
-                {listFormatter.format(match.banned.map((u) => u.username))}
+                {listFormatter.format(match.banned.map((u) => u.user.username))}
               </p>
             </div>
           </li>

@@ -16,12 +16,11 @@ CREATE TABLE "Guild" (
 
 -- CreateTable
 CREATE TABLE "MatchBanned" (
-    "id" SERIAL NOT NULL,
     "matchId" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "count" INTEGER NOT NULL,
 
-    CONSTRAINT "MatchBanned_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "MatchBanned_pkey" PRIMARY KEY ("matchId","userId")
 );
 
 -- CreateTable

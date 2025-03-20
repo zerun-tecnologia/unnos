@@ -16,6 +16,12 @@ export default {
         .setDescription('Usuário que foi banido')
         .setRequired(true),
     )
+    .addIntegerOption((option) =>
+      option
+        .setName('cards')
+        .setDescription('Número de cartas')
+        .setRequired(false),
+    )
     .toJSON(),
   async execute(interaction: ChatInputCommandInteraction<CacheType>) {
     try {
@@ -92,7 +98,11 @@ export default {
           data: {
             banned: {
               connect: {
-                id: user.id,
+                matchId_userId: {
+                  matchId: latestMatch.id,
+                  userId: user.id,
+                },
+                count: interaction.options.getInteger('cards') || 25,
               },
             },
           },

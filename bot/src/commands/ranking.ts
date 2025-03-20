@@ -25,9 +25,7 @@ export default {
       if (!guild) {
         await interaction.reply({
           content: 'Não foi possível ver o ranking.',
-          flags: [
-            MessageFlags.Ephemeral
-          ]
+          flags: [MessageFlags.Ephemeral],
         })
         return
       }
@@ -42,9 +40,7 @@ export default {
         if (!userRanking) {
           await interaction.reply({
             content: 'Usuário não encontrado.',
-            flags: [
-              MessageFlags.Ephemeral
-            ]
+            flags: [MessageFlags.Ephemeral],
           })
           return
         }
@@ -68,11 +64,10 @@ export default {
         const bans = await prisma.match.findMany({
           where: {
             banned: {
-              some: { id: user.id },
+              some: { userId: user.id },
             },
           },
         })
-
 
         await interaction.reply({
           embeds: [
@@ -98,9 +93,7 @@ export default {
               ],
             },
           ],
-          flags: [
-            MessageFlags.Ephemeral
-          ]
+          flags: [MessageFlags.Ephemeral],
         })
 
         return
@@ -112,7 +105,7 @@ export default {
             some: {
               id: guild.id,
             },
-          }
+          },
         },
         select: {
           username: true,
@@ -123,36 +116,41 @@ export default {
           },
           matches_banned: {
             select: {
-              id: true,
+              userId: true,
             },
           },
           matches_gave: {
             select: {
               id: true,
-            }
-          }
-        }
+            },
+          },
+        },
       })
 
-
       await interaction.reply({
-        embeds: [{
-          title: 'Ranking de usuários',
-          color: 0x0099ff,
-          description: 'Vitórias | Dadas | Bans',
-          fields: ranking.filter(user => {
-            return user.matches_winner.length > 0 || user.matches_gave.length > 0 || user.matches_banned.length > 0
-          }).map((user) => {
-            return {
-              name: user.username,
-              value: `${String(user.matches_winner.length).padEnd(3, '')} | ${String(user.matches_gave.length).padEnd(3, '')} | ${String(user.matches_banned.length).padEnd(3, '')}`,
-              inline: false,
-            }
-          }),
-        }],
-        flags: [
-          MessageFlags.Ephemeral
-        ]
+        embeds: [
+          {
+            title: 'Ranking de usuários',
+            color: 0x0099ff,
+            description: 'Vitórias | Dadas | Bans',
+            fields: ranking
+              .filter((user) => {
+                return (
+                  user.matches_winner.length > 0 ||
+                  user.matches_gave.length > 0 ||
+                  user.matches_banned.length > 0
+                )
+              })
+              .map((user) => {
+                return {
+                  name: user.username,
+                  value: `${String(user.matches_winner.length).padEnd(3, '')} | ${String(user.matches_gave.length).padEnd(3, '')} | ${String(user.matches_banned.length).padEnd(3, '')}`,
+                  inline: false,
+                }
+              }),
+          },
+        ],
+        flags: [MessageFlags.Ephemeral],
       })
     } catch (error) {
       console.error(error)

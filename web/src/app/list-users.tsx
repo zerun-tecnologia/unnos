@@ -12,7 +12,7 @@ export async function ListUsers() {
       },
       matches_banned: {
         select: {
-          id: true,
+          userId: true,
         },
       },
       matches_gave: {
