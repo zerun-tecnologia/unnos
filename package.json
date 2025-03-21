@@ -1,5 +1,5 @@
 {
-  "name": "unnos", 
+  "name": "unnos",
   "version": "1.0.0",
   "workspaces": [
     "web",
@@ -13,6 +13,6 @@
     "start:bot": "bun -F ./bot start"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.8.2"
   }
 }
