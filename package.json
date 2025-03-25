@@ -13,7 +13,7 @@
     "start:bot": "bun -F ./bot start"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.8.2"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0"

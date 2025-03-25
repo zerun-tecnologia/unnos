@@ -100,12 +100,9 @@ export default {
           },
           data: {
             banned: {
-              connect: {
-                matchId_userId: {
-                  matchId: latestMatch.id,
-                  userId: user.id,
-                },
-                count: interaction.options.getInteger('cards') || 25,
+              create: {
+                userId: user.id,
+                count: interaction.options.getInteger('cards') || 0,
               },
             },
           },
@@ -117,7 +114,7 @@ export default {
     } catch (error) {
       console.error(error)
       await interaction.reply({
-        content: 'Não foi possível registrar quem deu a partida.',
+        content: 'Não foi possível registrar o banido.',
       })
     }
   },
