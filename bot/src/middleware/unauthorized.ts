@@ -1,6 +1,6 @@
 import type { CacheType, ChatInputCommandInteraction } from 'discord.js'
 
-const bannedUsers = ['357015751057735682']
+const bannedUsers = ['357015751057735682', '765572736214761512']
 
 export function unauthorizedMiddleware(
   interaction: ChatInputCommandInteraction<CacheType>,
