@@ -1,6 +1,7 @@
 services:
   web:
     container_name: unnos-web
+    restart: unless-stopped
     build:
       context: .
       dockerfile: ./web/.nixpacks/Dockerfile
@@ -17,6 +18,7 @@ services:
 
   bot:
     container_name: unnos-bot
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile.bot
@@ -32,6 +34,7 @@ services:
 
   postgres:
     container_name: unnos-pg
+    restart: unless-stopped
     image: postgres
     environment:
       POSTGRES_USER: postgres
