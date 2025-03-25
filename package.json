@@ -1,12 +1,12 @@
 {
-  "name": "unnos", 
+  "name": "unnos",
   "version": "1.0.0",
   "workspaces": [
     "web",
     "bot"
   ],
   "scripts": {
-    "dev:web": "bun -F ./web dev",
+    "dev:web": "dotenv -- bun -F ./web dev",
     "start:web": "bun -F ./web start",
     "build:web": "bun -F ./web build",
     "dev:bot": "bun -F ./bot dev",
@@ -14,5 +14,8 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0"
   }
 }

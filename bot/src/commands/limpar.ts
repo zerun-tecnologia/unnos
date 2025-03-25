@@ -5,6 +5,7 @@ import {
   type CacheType,
 } from 'discord.js'
 import { prisma } from '../db'
+import { unauthorizedMiddleware } from '../middleware/unauthorized'
 
 export default {
   data: new SlashCommandBuilder()
@@ -12,6 +13,8 @@ export default {
     .setDescription('Limpar dados da partida')
     .toJSON(),
   async execute(interaction: ChatInputCommandInteraction<CacheType>) {
+    unauthorizedMiddleware(interaction)
+
     try {
       const guild = interaction.guild
 
