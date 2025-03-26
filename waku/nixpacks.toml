@@ -17,7 +17,7 @@ cacheDirectories = [
 
 [phases.install]
 dependsOn = [ 'setup' ]
-cmds = [ 'bun i --filter ./web' ]
+cmds = [ 'bun i --filter ./waku' ]
 cacheDirectories = [ '~/.bun/install/cache' ]
 paths = [ '/app/node_modules/.bin' ]
 
