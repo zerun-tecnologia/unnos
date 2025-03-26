@@ -1,13 +1,10 @@
 FROM ghcr.io/railwayapp/nixpacks:ubuntu-1741046653
 
-ARG DATABASE_URL
-ENV DATABASE_URL ${DATABASE_URL}
-
 ENTRYPOINT ["/bin/bash", "-l", "-c"]
 WORKDIR /app/
 
 
-COPY ./web/.nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+COPY ./waku/.nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
 RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
 
 
@@ -20,11 +17,11 @@ ENV CI=$CI NIXPACKS_METADATA=$NIXPACKS_METADATA NODE_ENV=$NODE_ENV NPM_CONFIG_PR
 # install phase
 ENV NIXPACKS_PATH=/app/node_modules/.bin:$NIXPACKS_PATH
 COPY . /app/.
-RUN --mount=type=cache,id=n1juX80NWQ4-/root/bun/install/cache,target=/root/.bun/install/cache bun i --filter ./web
+RUN --mount=type=cache,id=SvGUkkn8lE-/root/bun/install/cache,target=/root/.bun/install/cache bun i --filter ./web
 
 # build phase
 COPY . /app/.
-RUN --mount=type=cache,id=n1juX80NWQ4-next/cache,target=/app/.next/cache --mount=type=cache,id=n1juX80NWQ4-node_modules/cache,target=/app/node_modules/.cache bun build:web
+RUN --mount=type=cache,id=SvGUkkn8lE-next/cache,target=/app/.next/cache --mount=type=cache,id=SvGUkkn8lE-node_modules/cache,target=/app/node_modules/.cache bun build:web
 
 
 RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile

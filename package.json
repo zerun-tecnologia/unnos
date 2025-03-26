@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "workspaces": [
     "web",
-    "bot"
+    "bot",
+    "waku"
   ],
   "scripts": {
-    "dev:web": "dotenv -- bun -F ./web dev",
-    "start:web": "bun -F ./web start",
-    "build:web": "bun -F ./web build",
+    "dev:web": "dotenv -- bun -F ./waku dev",
+    "start:web": "bun -F ./waku start",
+    "build:web": "bun -F ./waku build",
     "dev:bot": "bun -F ./bot dev",
     "start:bot": "bun -F ./bot start"
   },
