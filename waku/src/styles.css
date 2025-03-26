@@ -4,45 +4,166 @@ layer(base);
 @tailwind components;
 @tailwind utilities;
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 222 84% 5%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5% 26%;
+    --sidebar-primary: 240 6% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 240 6% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
   }
-  to {
-    transform: rotate(360deg);
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 18%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 18%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 213 27% 84%;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .glassmorphism {
+    @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg;
+  }
+
+  .glass-card {
+    @apply rounded-2xl bg-white/80 backdrop-blur-md shadow-lg border border-white/20;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .button-primary {
+    @apply bg-primary text-primary-foreground rounded-full px-6 py-3 font-medium transition-all duration-300 hover:brightness-110 hover:shadow-md active:scale-95;
+  }
+
+  .button-secondary {
+    @apply bg-secondary text-secondary-foreground rounded-full px-6 py-3 font-medium transition-all duration-300 hover:bg-secondary/80 active:scale-95;
+  }
+
+  .input-field {
+    @apply rounded-lg border border-border bg-background px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/25;
+  }
+
+  .animate-on-scroll {
+    @apply opacity-0 translate-y-8 transition-all duration-700;
+  }
+  
+  .animate-on-scroll.animate {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .page-transition-enter {
+    @apply opacity-0;
+  }
+  
+  .page-transition-enter-active {
+    @apply opacity-100 transition-opacity duration-300;
+  }
+  
+  .page-transition-exit {
+    @apply opacity-100;
+  }
+  
+  .page-transition-exit-active {
+    @apply opacity-0 transition-opacity duration-300;
   }
 }
 
-.card {
-  padding: 2em;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.read-the-docs {
-  color: #888;
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Adding smooth transitions between pages */
+.page-transition-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Responsive utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
