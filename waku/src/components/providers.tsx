@@ -3,8 +3,8 @@
 import type { PropsWithChildren } from 'react'
 import { HeroUIProvider } from '@heroui/react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClient } from 'src/lib/query'
 import { useRouter_UNSTABLE as useRouter } from 'waku'
+import { queryClient } from '../lib/query'
 
 type Props = PropsWithChildren
 
