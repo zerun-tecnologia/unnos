@@ -12,6 +12,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
+      - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
     networks:
       - default

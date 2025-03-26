@@ -1,12 +1,11 @@
 import type { ReactNode } from 'react'
 
 import { Footer } from '../components/footer'
-
 import { Header } from '../components/header'
 import { Providers } from '../components/providers'
 import '../styles.css'
 
-interface RootLayoutProps { children: ReactNode }
+type RootLayoutProps = { children: ReactNode }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const data = await getData()
