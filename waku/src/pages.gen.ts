@@ -6,6 +6,7 @@ import type { PathsForPages, GetConfigResponse } from 'waku/router';
 
 // prettier-ignore
 type Page =
+| { path: '/create-match'; render: 'dynamic' }
 | { path: '/'; render: 'dynamic' }
 | { path: '/matches/[id]'; render: 'dynamic' }
 | { path: '/matches'; render: 'dynamic' };
