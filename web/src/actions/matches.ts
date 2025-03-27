@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma'
 
-import type { CreateMatchType } from '../validation/create-match-form-schema'
+import type { CreateMatchType } from '../app/validation/create-match-form-schema'
 
 export async function createMatch(input: CreateMatchType) {
   await prisma.match.create({

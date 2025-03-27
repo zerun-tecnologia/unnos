@@ -1,13 +1,16 @@
 'use client'
 
-import { addToast, Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem } from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem } from '@heroui/react'
+import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 
 import type { CreateMatchOutput } from '@/app/validation/create-match-form-schema'
 
+import { listGuilds } from '@/actions/guilds'
 import { createMatchSchema } from '@/app/validation/create-match-form-schema'
+import { matchNameGenerator } from '@/utils/match-name-generator'
 
 type FormField<T> = {
   value: T
@@ -99,19 +102,10 @@ function formReducer(state: CreateMatchFormProps, action: Actions): CreateMatchF
         }
       }
 
-      state.isSubmitting = true
-      try {
-        action.function(data)
+      return {
+        ...state,
+        isSubmitting: true,
       }
-      catch (err: unknown) {
-        addToast({
-          title: 'Erro ao criar partida',
-        })
-      }
-      finally {
-        state.isSubmitting = false
-      }
-      return state
     }
     default: {
       return state
@@ -119,17 +113,19 @@ function formReducer(state: CreateMatchFormProps, action: Actions): CreateMatchF
   }
 }
 
-const MOCK_GUILDS = [
-  { id: '1', name: 'Servidor 1' },
-]
-
-export function CreateMatchForm({ handleSubmit }: { handleSubmit: (data: CreateMatchOutput) => void }) {
+export function CreateMatchForm() {
   const { push } = useRouter()
   const [state, dispatch] = useReducer(formReducer, initialFormState)
 
-  useEffect(() => {
-    console.log('Form state:', state)
-  }, [state.fields])
+  const { data: guilds, isFetching } = useQuery({
+    queryKey: ['guilds'],
+    queryFn: async () => await listGuilds(),
+
+  })
+
+  const isLoading = isFetching || state.isSubmitting
+
+  const guildsList = guilds || []
 
   return (
     <motion.div
@@ -138,16 +134,7 @@ export function CreateMatchForm({ handleSubmit }: { handleSubmit: (data: CreateM
       transition={{ delay: 0.1, duration: 0.5 }}
     >
 
-      <form onSubmit={(e) => {
-        e.preventDefault()
-        dispatch({
-          type: 'SUBMIT_FORM',
-          function: (data) => {
-            handleSubmit(data)
-          },
-        })
-      }}
-      >
+      <form>
         <Card className="glass-card animate-scale-in">
           <CardHeader className="flex flex-col items-start">
             <h1>Detalhes da Partida</h1>
@@ -158,6 +145,7 @@ export function CreateMatchForm({ handleSubmit }: { handleSubmit: (data: CreateM
           <CardBody className="space-y-6">
             <div className="space-y-2">
               <Input
+                defaultValue={matchNameGenerator()}
                 label="Nome da Partida (Opcional)"
                 id="match-name"
                 placeholder="ex.: Torneio Semanal"
@@ -183,7 +171,7 @@ export function CreateMatchForm({ handleSubmit }: { handleSubmit: (data: CreateM
                   dispatch({ type: 'SET_GUILD_ID', value: e.target.value })
                 }}
               >
-                {MOCK_GUILDS.map(guild => (
+                {guildsList.map(guild => (
                   <SelectItem key={guild.id}>
                     {guild.name}
                   </SelectItem>
@@ -197,7 +185,8 @@ export function CreateMatchForm({ handleSubmit }: { handleSubmit: (data: CreateM
           <CardFooter className="flex justify-between">
             <Button
               type="button"
-              disabled={state.isSubmitting}
+              isDisabled={state.isSubmitting}
+              isLoading={state.isSubmitting}
               onPress={() => push('/matches')}
             >
               Cancelar
