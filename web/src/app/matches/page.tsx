@@ -53,7 +53,7 @@ const MOCK_MATCHES = [
 ]
 
 function Matches() {
-  const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [statusFilter, _setStatusFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
 
   const filteredMatches = MOCK_MATCHES.filter((match) => {
@@ -66,8 +66,8 @@ function Matches() {
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
       return (
-        match.name?.toLowerCase().includes(query) ||
-        match.guild.name.toLowerCase().includes(query)
+        match.name?.toLowerCase().includes(query)
+        || match.guild.name.toLowerCase().includes(query)
       )
     }
 
@@ -117,7 +117,7 @@ function Matches() {
               <Input
                 placeholder="Search matches..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 className="w-full"
               />
             </div>
@@ -137,33 +137,35 @@ function Matches() {
           </div>
         </motion.div>
 
-        {filteredMatches.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-lg text-muted-foreground mb-4">
-              No matches found
-            </div>
-            <Button
-              as={Link}
-              href="/create-match"
-              variant="bordered"
-            >
-              Create a Match
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredMatches.map((match, index) => (
-              <motion.div
-                key={match.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05, duration: 0.4 }}
-              >
-                <MatchCard {...match} />
-              </motion.div>
-            ))}
-          </div>
-        )}
+        {filteredMatches.length === 0
+          ? (
+              <div className="text-center py-12">
+                <div className="text-lg text-muted-foreground mb-4">
+                  No matches found
+                </div>
+                <Button
+                  as={Link}
+                  href="/create-match"
+                  variant="bordered"
+                >
+                  Create a Match
+                </Button>
+              </div>
+            )
+          : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredMatches.map((match, index) => (
+                  <motion.div
+                    key={match.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05, duration: 0.4 }}
+                  >
+                    <MatchCard {...match} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
       </div>
     </>
   )

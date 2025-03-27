@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
+import { useEffect, useRef } from 'react'
 
 export type FormatterCallbackParams =
   echarts.TooltipComponentFormatterCallbackParams
@@ -31,7 +31,8 @@ export function Chart({ options, className }: Props) {
   }, [])
 
   useEffect(() => {
-    if (!chartInstance.current) return
+    if (!chartInstance.current)
+      return
 
     chartInstance.current.setOption(options)
   }, [options])

@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react'
 
 import { HeroUIProvider, ToastProvider } from '@heroui/react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { useRouter_UNSTABLE as useRouter } from 'waku'
+import { useRouter } from 'next/navigation'
 
 import { queryClient } from '../lib/query'
 
@@ -14,7 +14,7 @@ export function Providers({ children }: Props) {
   const router = useRouter()
 
   return (
-    <HeroUIProvider navigate={(to, options) => router.push(to as any, options)}>
+    <HeroUIProvider navigate={router.push}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       <ToastProvider />
     </HeroUIProvider>

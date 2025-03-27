@@ -25,7 +25,6 @@ export function MatchCard({
   guild,
   status,
   participantsCount,
-  winnerId,
   createdAt,
 }: MatchCardProps) {
   const formattedDate = new Date(createdAt).toLocaleDateString('en-US', {
