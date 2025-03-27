@@ -1,6 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { Link, useRouter_UNSTABLE as useRouter } from 'waku'
+import { LogoUnnos } from './logo'
 
 const navItems = [
   { path: '/', label: 'Home' },
@@ -20,9 +21,8 @@ export function Header() {
           transition={{ duration: 0.5 }}
           className="flex items-center"
         >
-          <Link to="/" className="text-xl font-bold text-primary">
-            Match
-            <span className="text-foreground">Hub</span>
+          <Link to="/" className="mr-4">
+            <LogoUnnos />
           </Link>
         </motion.div>
 
@@ -35,7 +35,7 @@ export function Header() {
               transition={{ duration: 0.3, delay: 0.1 + i * 0.1 }}
             >
               <Link
-                to={item.path}
+                to={item.path as any} 
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 relative ${
                   path === item.path
                     ? 'text-primary'

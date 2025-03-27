@@ -19,6 +19,7 @@
     "dotenv-cli": "^8.0.0"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.31.0",
     "lucide-react": "^0.484.0"
   }
 }
