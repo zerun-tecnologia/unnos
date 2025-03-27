@@ -2,7 +2,7 @@
 
 import type { PropsWithChildren } from 'react'
 
-import { HeroUIProvider } from '@heroui/react'
+import { HeroUIProvider, ToastProvider } from '@heroui/react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
@@ -16,6 +16,7 @@ export function Providers({ children }: Props) {
   return (
     <HeroUIProvider navigate={router.push}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <ToastProvider />
     </HeroUIProvider>
   )
 }
