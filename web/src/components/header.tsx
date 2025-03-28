@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { AuthButton } from './layout/auth-button'
 import { LogoUnnos } from './logo'
 
 const navItems = [
@@ -59,6 +60,7 @@ export function Header() {
               </Link>
             </motion.div>
           ))}
+          <AuthButton />
         </nav>
 
         <div className="md:hidden">

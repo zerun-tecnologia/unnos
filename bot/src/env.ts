@@ -1,8 +1,8 @@
 import * as v from 'valibot'
 
 const schema = v.object({
-  CLIENT_ID: v.string(),
-  TOKEN: v.string(),
+  AUTH_DISCORD_ID: v.string(),
+  AUTH_DISCORD_TOKEN: v.string(),
   DATABASE_URL: v.string(),
 })
 
