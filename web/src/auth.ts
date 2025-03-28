@@ -12,6 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Discord({
       name: 'discord',
+      authorization: 'https://discord.com/api/oauth2/authorize?scope=identify+email+guilds',
     }),
   ],
   callbacks: {
