@@ -1,116 +1,30 @@
 'use client'
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem } from '@heroui/react'
-import { useQuery } from '@tanstack/react-query'
+import type { CreateMatchOutput } from '@/app/validation/create-match-form-schema'
+import type { CreateMatchFormProps } from '@/reducers/match-reducer'
+import type { FormEvent } from 'react'
+
+import { listGuilds } from '@/actions/guilds'
+import { createMatch } from '@/actions/match'
+import { createMatchSchema } from '@/app/validation/create-match-form-schema'
+import { formReducer } from '@/reducers/match-reducer'
+import { matchNameGenerator } from '@/utils/match-name-generator'
+import { addToast, Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem } from '@heroui/react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useReducer } from 'react'
 
-import type { CreateMatchOutput } from '@/app/validation/create-match-form-schema'
-
-import { listGuilds } from '@/actions/guilds'
-import { createMatchSchema } from '@/app/validation/create-match-form-schema'
-import { matchNameGenerator } from '@/utils/match-name-generator'
-
-type FormField<T> = {
-  value: T
-  errors: string[]
-}
-
-type CreateMatchFormProps = {
-  fields: {
-    name: FormField<CreateMatchOutput['name']>
-    guildId: FormField<CreateMatchOutput['guildId']>
-  }
-  isSubmitting: boolean
-}
-
 const initialFormState: CreateMatchFormProps = {
-  fields: {
-    name: {
-      value: '',
-      errors: [],
-    },
-    guildId: {
-      value: '',
-      errors: [],
-    },
+  name: {
+    value: '',
+    errors: [],
   },
-  isSubmitting: false,
-}
+  guildId: {
+    value: '',
+    errors: [],
+  },
 
-type Actions = {
-  type: 'SET_NAME'
-  value: string
-} | {
-  type: 'SET_GUILD_ID'
-  value: string
-} | {
-  type: 'SUBMIT_FORM'
-  function: (state: CreateMatchOutput) => void
-}
-
-function formReducer(state: CreateMatchFormProps, action: Actions): CreateMatchFormProps {
-  switch (action.type) {
-    case 'SET_NAME': {
-      return {
-        ...state,
-        fields: {
-          ...state.fields,
-          name: {
-            value: action.value,
-            errors: [],
-          },
-        },
-      }
-    }
-    case 'SET_GUILD_ID': {
-      return {
-        ...state,
-        fields: {
-          ...state.fields,
-          guildId: {
-            value: action.value,
-            errors: [],
-          },
-        },
-      }
-    }
-    case 'SUBMIT_FORM': {
-      const { error, data } = createMatchSchema.safeParse({
-        name: state.fields.name.value,
-        guildId: state.fields.guildId.value,
-      })
-
-      if (error && !data) {
-        return {
-          ...state,
-          fields: {
-            name: {
-              value: state.fields.name.value,
-              errors: error.errors
-                .filter(e => e.path.includes('name'))
-                .map(e => e.message),
-            },
-            guildId: {
-              value: state.fields.guildId.value,
-              errors: error.errors
-                .filter(e => e.path.includes('guildId'))
-                .map(e => e.message),
-            },
-          },
-        }
-      }
-
-      return {
-        ...state,
-        isSubmitting: true,
-      }
-    }
-    default: {
-      return state
-    }
-  }
 }
 
 export function CreateMatchForm() {
@@ -123,9 +37,52 @@ export function CreateMatchForm() {
 
   })
 
-  const isLoading = isFetching || state.isSubmitting
+  const handleSubmitMutation = useMutation({
+    mutationFn: async (data: CreateMatchOutput) => {
+      createMatch(data)
+    },
+    onSuccess: () => {
+      push('/matches')
+      addToast({
+        color: 'success',
+        title: 'Partida criada com sucesso',
+      })
+    },
+    onError: () => {
+      addToast({
+        color: 'danger',
+        title: 'Erro ao criar a partida',
+      })
+    },
+  })
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const { error, data } = createMatchSchema.safeParse({
+      name: state.name.value,
+      guildId: state.guildId.value,
+      participants: [],
+    })
+
+    if (error) {
+      error.formErrors.fieldErrors.guildId && dispatch({
+        type: 'SET_GUILD_ID',
+        field: { errors: error.formErrors.fieldErrors.guildId },
+      })
+
+      error.formErrors.fieldErrors.name && dispatch({
+        type: 'SET_NAME',
+        field: { errors: error.formErrors.fieldErrors.name },
+      })
+
+      return
+    }
+
+    handleSubmitMutation.mutateAsync(data)
+  }
 
   const guildsList = guilds || []
+  const isLoading = isFetching || handleSubmitMutation?.isPending
 
   return (
     <motion.div
@@ -134,7 +91,7 @@ export function CreateMatchForm() {
       transition={{ delay: 0.1, duration: 0.5 }}
     >
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <Card className="glass-card animate-scale-in">
           <CardHeader className="flex flex-col items-start">
             <h1>Detalhes da Partida</h1>
@@ -149,11 +106,11 @@ export function CreateMatchForm() {
                 label="Nome da Partida (Opcional)"
                 id="match-name"
                 placeholder="ex.: Torneio Semanal"
-                errorMessage={state.fields.name.errors.join(', ')}
-                isInvalid={state.fields.name.errors.length > 0}
-                disabled={state.isSubmitting}
+                errorMessage={state.name.errors.join(', ')}
+                isInvalid={state.name.errors.length > 0}
+                disabled={isLoading}
                 onChange={(e) => {
-                  dispatch({ type: 'SET_NAME', value: e.target.value })
+                  dispatch({ type: 'SET_NAME', field: { value: e.target.value } })
                 }}
               />
               <p className="text-xs text-muted-foreground">
@@ -164,11 +121,11 @@ export function CreateMatchForm() {
             <div className="space-y-2">
               <Select
                 label="Servidor"
-                errorMessage={state.fields.guildId.errors.join(', ')}
-                isInvalid={state.fields.guildId.errors.length > 0}
-                disabled={state.isSubmitting}
+                errorMessage={state.guildId.errors.join(', ')}
+                isInvalid={state.guildId.errors.length > 0}
+                disabled={isLoading}
                 onChange={(e) => {
-                  dispatch({ type: 'SET_GUILD_ID', value: e.target.value })
+                  dispatch({ type: 'SET_GUILD_ID', field: { value: e.target.value } })
                 }}
               >
                 {guildsList.map(guild => (
@@ -185,8 +142,7 @@ export function CreateMatchForm() {
           <CardFooter className="flex justify-between">
             <Button
               type="button"
-              isDisabled={state.isSubmitting}
-              isLoading={state.isSubmitting}
+              isDisabled={isLoading}
               onPress={() => push('/matches')}
             >
               Cancelar
@@ -194,8 +150,8 @@ export function CreateMatchForm() {
             <Button
               type="submit"
               className="rounded-full px-8"
-              isLoading={state.isSubmitting}
-              isDisabled={state.isSubmitting}
+              isLoading={isLoading}
+              isDisabled={isLoading}
             >
               Criar Partida
             </Button>
