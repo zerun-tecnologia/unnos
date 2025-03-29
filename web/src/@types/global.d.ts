@@ -9,3 +9,10 @@ export type Query<T = any> = {
   perPage?: number
   filters?: T
 }
+
+export type PaginatedQueryResponse<T> = {
+  total: number
+  items: T[]
+  page: number
+  perPage: number
+}

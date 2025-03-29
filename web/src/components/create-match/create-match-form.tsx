@@ -1,23 +1,25 @@
 'use client'
 
+import type { FormEvent } from 'react'
+
+import { addToast, Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem } from '@heroui/react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
+import { useEffect, useReducer } from 'react'
+
 import type { CreateMatchOutput } from '@/app/validation/create-match-form-schema'
 import type { CreateMatchFormProps } from '@/reducers/match-reducer'
-import type { FormEvent } from 'react'
 
 import { listGuilds } from '@/actions/guilds'
 import { createMatch } from '@/actions/match'
 import { createMatchSchema } from '@/app/validation/create-match-form-schema'
 import { formReducer } from '@/reducers/match-reducer'
 import { matchNameGenerator } from '@/utils/match-name-generator'
-import { addToast, Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem } from '@heroui/react'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { motion } from 'framer-motion'
-import { useRouter } from 'next/navigation'
-import { useReducer } from 'react'
 
 const initialFormState: CreateMatchFormProps = {
   name: {
-    value: '',
+    value: matchNameGenerator(),
     errors: [],
   },
   guildId: {
@@ -84,6 +86,7 @@ export function CreateMatchForm() {
   const guildsList = guilds || []
   const isLoading = isFetching || handleSubmitMutation?.isPending
 
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -102,8 +105,8 @@ export function CreateMatchForm() {
           <CardBody className="space-y-6">
             <div className="space-y-2">
               <Input
-                defaultValue={matchNameGenerator()}
                 label="Nome da Partida (Opcional)"
+                value={state.name.value}
                 id="match-name"
                 placeholder="ex.: Torneio Semanal"
                 errorMessage={state.name.errors.join(', ')}

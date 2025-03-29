@@ -16,7 +16,7 @@ type MatchCardProps = {
   status: string
   participantsCount: number
   winnerId?: string
-  createdAt: string
+  createdAt: Date
 }
 
 export function MatchCard({
