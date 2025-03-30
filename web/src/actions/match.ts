@@ -6,6 +6,7 @@ import type { PaginatedQueryResponse, Query } from '@/@types/global'
 import { prisma } from '@/lib/prisma'
 
 import type { CreateMatchType } from '../app/validation/create-match-form-schema'
+import { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
 
 export type MatchFilters = {
   status?: string
@@ -90,4 +91,15 @@ export async function retrieveMatchById(id: number): Promise<MatchDetail | null>
   })
 
   return data
+}
+
+export async function setMatchWinner(matchId: number, data: SetMatchWinnerMatchOutput) {
+  await prisma.match.update({
+    where: {
+      id: matchId,
+    },
+    data: {
+      winnerId: data.winnerId,
+    },
+  })
 }
