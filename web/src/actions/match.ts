@@ -1,12 +1,18 @@
 'use server'
+import type { Guild, MatchBanned, Prisma, Match as PrismaMatch, User } from '@prisma/client'
 
-import type { Guild, Match, Prisma } from '@prisma/client'
-
-import type { Query, PaginatedQueryResponse } from '@/@types/global'
+import type { PaginatedQueryResponse, Query } from '@/@types/global'
 
 import { prisma } from '@/lib/prisma'
 
 import type { CreateMatchType } from '../app/validation/create-match-form-schema'
+
+export type MatchFilters = {
+  status?: string
+}
+
+export type EachMatchPaginated = PrismaMatch & { guild: Guild, participants: User[] }
+export type MatchDetail = PrismaMatch & { guild: Guild, participants: User[], banned: MatchBanned[], gave: User[], winner: User | null }
 
 export async function createMatch(input: CreateMatchType) {
   const users = await prisma.user.findMany({
@@ -36,11 +42,7 @@ export async function createMatch(input: CreateMatchType) {
   })
 }
 
-type MatchFilters = {
-  status?: string
-}
-
-export async function fetchMatches(query?: Query<MatchFilters>): Promise<PaginatedQueryResponse<(Match & { guild: Guild, participants: number })>> {
+export async function fetchMatches(query?: Query<MatchFilters>): Promise<PaginatedQueryResponse<EachMatchPaginated>> {
   const { page = 1, perPage = 20 } = query ?? {}
   const where: Prisma.MatchWhereInput = {
     name: { contains: query?.search, mode: 'insensitive' },
@@ -61,17 +63,31 @@ export async function fetchMatches(query?: Query<MatchFilters>): Promise<Paginat
           participants: true,
         },
       },
-    ), 
+    ),
     prisma.match.count({ where }),
   ])
 
   return {
-    page: page,
-    perPage: perPage,
+    page,
+    perPage,
     total: count,
-    items : data.map(match => ({
-      ...match,
-      participants: match.participants.length,
-    }))
+    items: data,
   }
+}
+
+export async function retrieveMatchById(id: number): Promise<MatchDetail | null> {
+  const data = await prisma.match.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      guild: true,
+      participants: true,
+      banned: true,
+      gave: true,
+      winner: true,
+    },
+  })
+
+  return data
 }

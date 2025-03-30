@@ -19,6 +19,9 @@
     "dotenv-cli": "^8.0.0"
   },
   "dependencies": {
-    "unique-names-generator": "^4.7.1"
+    "@hugeicons/react": "^1.0.5",
+    "lucide-react": "^0.485.0",
+    "unique-names-generator": "^4.7.1",
+    "usehooks-ts": "^3.1.1"
   }
 }
