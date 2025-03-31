@@ -1,4 +1,3 @@
-import type { FormField } from '@/@types/global'
 import type { CreateMatchOutput } from '@/app/validation/create-match-form-schema'
 
 export type CreateMatchFormProps = {

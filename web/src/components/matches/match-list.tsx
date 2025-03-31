@@ -3,6 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
 
 import { fetchMatches } from '@/actions/match'
 
@@ -29,7 +30,7 @@ export function MatchList() {
     initialPageParam: 1,
   })
 
-  const matchesList = matchQuery.data?.pages.flatMap(page => page.items) ?? []
+  const matchesList = useMemo(() => matchQuery.data?.pages.flatMap(page => page.items) ?? [], [matchQuery.data])
   const hasNextPage = matchQuery.data?.pages[0].total && matchQuery.data?.pages[0].total > matchesList.length
 
   return (
@@ -52,7 +53,7 @@ export function MatchList() {
             </div>
           )
 
-        : matchQuery.isFetching
+        : matchQuery.isFetching && matchesList.length === 0
           ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array.from(
