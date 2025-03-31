@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 
-import { Geist, Geist_Mono } from 'next/font/google'
+import { SessionProvider } from 'next-auth/react'
 
 import './globals.css'
+
+import { Geist, Geist_Mono } from 'next/font/google'
 
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
@@ -40,6 +42,7 @@ export default function RootLayout({
             {children}
           </Providers>
         </main>
+
       </body>
     </html>
   )

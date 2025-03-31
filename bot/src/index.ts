@@ -93,4 +93,4 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
   }
 })
-client.login(env.TOKEN)
+client.login(env.AUTH_DISCORD_TOKEN)

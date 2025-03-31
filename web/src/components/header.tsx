@@ -3,32 +3,34 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { AuthButton } from './layout/auth-button'
 import { LogoUnnos } from './logo'
 
 const navItems = [
   { path: '/', label: 'Home' },
   { path: '/matches', label: 'Matches' },
   { path: '/create-match', label: 'Create Match' },
+  { path: '/guilds', label: 'Guilds' },
 ]
 
 export function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="fixed w-full top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+    <header className="fixed w-full top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border h-16">
+      <div className="container px-6 h-full flex items-center justify-between">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex items-center"
+          className="flex items-center justify-start flex-1"
         >
           <Link href="/" className="mr-4">
             <LogoUnnos />
           </Link>
         </motion.div>
 
-        <nav className="hidden md:flex items-center space-x-1">
+        <nav className="hidden md:flex items-center justify-center space-x-1 flex-1">
           {navItems.map((item, i) => (
             <motion.div
               key={item.path}
@@ -60,6 +62,14 @@ export function Header() {
             </motion.div>
           ))}
         </nav>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-end items-center flex-1"
+        >
+          <AuthButton />
+        </motion.div>
 
         <div className="md:hidden">
           {/* Mobile menu button */}
