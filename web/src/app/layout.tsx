@@ -36,15 +36,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider>
-          <Header />
-          <main className="m-6 flex items-center *:min-h-64 *:min-w-64 lg:m-0 lg:min-h-svh lg:justify-center">
-            <Providers>
-              {children}
-            </Providers>
-          </main>
-          <Footer />
-        </SessionProvider>
+        <Header />
+        <main className="mx-4 h-screen mt-[60px] pt-8">
+          <Providers>
+            {children}
+          </Providers>
+        </main>
+
       </body>
     </html>
   )

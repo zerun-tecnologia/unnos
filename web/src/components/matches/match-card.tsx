@@ -4,7 +4,7 @@ import { Chip } from '@heroui/react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
-import { GlassmorphicCard } from './glassmorphic-card'
+import { GlassmorphicCard } from '../glassmorphic-card'
 
 type MatchCardProps = {
   id: number
@@ -16,7 +16,7 @@ type MatchCardProps = {
   status: string
   participantsCount: number
   winnerId?: string
-  createdAt: string
+  createdAt: Date
 }
 
 export function MatchCard({
