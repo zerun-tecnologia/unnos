@@ -1,14 +1,14 @@
 import { z } from 'zod'
 
 export const createMatchSchema = z.object({
-    name: z.string().optional(),
-    guildId: z.string().min(1, { message: 'O nome do servidor é obrigatório' }),
-    participants: z.array(
-        z.object({
-            id: z.string(),
-            username: z.string(),
-        })
-    ).default([]),
+  name: z.string().optional(),
+  guildId: z.string().min(1, { message: 'O nome do servidor é obrigatório' }),
+  participants: z.array(
+    z.object({
+      id: z.string(),
+      username: z.string(),
+    }),
+  ).default([]),
 })
 
 export type CreateMatchType = z.infer<typeof createMatchSchema>

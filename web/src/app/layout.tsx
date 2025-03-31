@@ -6,7 +6,6 @@ import './globals.css'
 
 import { Geist, Geist_Mono } from 'next/font/google'
 
-import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
 
 import { Providers } from './providers'
@@ -36,13 +35,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <main className="mx-4 h-screen mt-[60px] pt-8">
-          <Providers>
-            {children}
-          </Providers>
-        </main>
-
+        <SessionProvider>
+          <Header />
+          <main className="mx-4 h-screen mt-[60px] pt-8">
+            <Providers>
+              {children}
+            </Providers>
+          </main>
+        </SessionProvider>
       </body>
     </html>
   )

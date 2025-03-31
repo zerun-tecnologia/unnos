@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 
 import { cn, NumberInput, useCheckbox, VisuallyHidden } from '@heroui/react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 type CustomCheckboxProps = {
   children: ReactNode
@@ -27,7 +27,7 @@ export function CustomCheckbox(props: CustomCheckboxProps) {
         {...getBaseProps()}
         className={cn(
           'group inline-flex items-center hover:opacity-70 active:opacity-50 justify-between flex-row-reverse tap-highlight-transparent w-full',
-          'cursor-pointer p-4 gap-4'
+          'cursor-pointer p-4 gap-4',
         )}
       >
         <VisuallyHidden>
@@ -65,7 +65,7 @@ export function CustomCheckbox(props: CustomCheckboxProps) {
               label="Quantidade de cartas"
               placeholder="Enter the amount"
               variant="bordered"
-              onClear={() => console.log("number input cleared")}
+              onClear={() => console.log('number input cleared')}
             />
           </motion.div>
         )}

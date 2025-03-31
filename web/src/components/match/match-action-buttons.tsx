@@ -1,11 +1,10 @@
 'use client'
 import { Button } from '@heroui/react'
 import { motion } from 'framer-motion'
+
 import { SelectWinnerModal } from './match-select-winner-modal'
 
-
 export function MatchActionButtons() {
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

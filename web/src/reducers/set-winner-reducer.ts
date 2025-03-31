@@ -1,5 +1,4 @@
-import type { FormField } from '@/@types/global'
-import { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
+import type { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
 
 export type SetWinnerFormProps = {
 
@@ -11,7 +10,7 @@ export type MatchReducerActions = {
   type: 'SET_WINNER_ID'
   field: Partial<FormField<SetMatchWinnerMatchOutput['winnerId']>>
 } | {
-   type: 'SUBMIT_FORM'
+  type: 'SUBMIT_FORM'
   function: (state: MatchReducerActions) => void
 }
 

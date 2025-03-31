@@ -52,7 +52,7 @@ export function MatchList() {
             </div>
           )
 
-        : matchQuery.isFetching && matchesList.length === 0
+        : matchQuery.isFetching
           ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array.from(

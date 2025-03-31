@@ -6,7 +6,7 @@ import { addToast, Button, Card, CardBody, CardFooter, CardHeader, Input, Select
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 
 import type { CreateMatchOutput } from '@/app/validation/create-match-form-schema'
 import type { CreateMatchFormProps } from '@/reducers/match-reducer'
@@ -85,7 +85,6 @@ export function CreateMatchForm() {
 
   const guildsList = guilds || []
   const isLoading = isFetching || handleSubmitMutation?.isPending
-
 
   return (
     <motion.div

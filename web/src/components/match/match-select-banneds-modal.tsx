@@ -1,12 +1,9 @@
 'use client'
-import { Button, CheckboxGroup, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, NumberInput, RadioGroup, useDisclosure } from '@heroui/react'
-
-import type { MatchDetail } from '@/actions/match'
+import { Button, CheckboxGroup, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@heroui/react'
 
 import { useMatch } from '@/contexts/match-context'
 
 import { CustomCheckbox } from '../custom-checkbox'
-import { CustomRadio } from '../custom-radio'
 
 type SelectWinnerModalContentProps = {
   onClose: () => void
@@ -27,11 +24,10 @@ export function SelectBannedsModalContent({ onClose }: SelectWinnerModalContentP
         <CheckboxGroup>
           <div className="grid grid-cols-2 gap-4">
             {match.participants.map(item => (
-              
-                <CustomCheckbox showNumberInput={true} key={item.id} description={item.id} value={item.id}>
-                  {item.username}
-                </CustomCheckbox>
-                
+
+              <CustomCheckbox showNumberInput={true} key={item.id} description={item.id} value={item.id}>
+                {item.username}
+              </CustomCheckbox>
 
             ))}
           </div>

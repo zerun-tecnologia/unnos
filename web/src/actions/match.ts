@@ -1,12 +1,10 @@
 'use server'
 import type { Guild, MatchBanned, Prisma, Match as PrismaMatch, User } from '@prisma/client'
 
-import type { PaginatedQueryResponse, Query } from '@/@types/global'
+import type { CreateMatchType } from '@/app/validation/create-match-form-schema'
+import type { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
 
 import { prisma } from '@/lib/prisma'
-
-import type { CreateMatchType } from '../app/validation/create-match-form-schema'
-import { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
 
 export type MatchFilters = {
   status?: string

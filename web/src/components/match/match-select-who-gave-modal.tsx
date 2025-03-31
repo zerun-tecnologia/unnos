@@ -1,12 +1,9 @@
 'use client'
-import { Button, CheckboxGroup, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, RadioGroup, useDisclosure } from '@heroui/react'
-
-import type { MatchDetail } from '@/actions/match'
+import { Button, CheckboxGroup, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@heroui/react'
 
 import { useMatch } from '@/contexts/match-context'
 
 import { CustomCheckbox } from '../custom-checkbox'
-import { CustomRadio } from '../custom-radio'
 
 type SelectWinnerModalContentProps = {
   onClose: () => void

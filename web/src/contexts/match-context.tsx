@@ -21,7 +21,7 @@ export function MatchProvider({ id, children }: { id: number, children: ReactNod
   })
 
   return (
-    <MatchContext value={{ match , isLoading: isFetching }}>
+    <MatchContext value={{ match, isLoading: isFetching }}>
       {children}
     </MatchContext>
   )
