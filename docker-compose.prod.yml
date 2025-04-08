@@ -8,9 +8,6 @@ services:
       args:
         - DATABASE_URL=${DATABASE_URL}
     image: unnos-web
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
       - AUTH_TRUST_HOST=${AUTH_TRUST_HOST}
       - AUTH_SECRET=${AUTH_SECRET}
@@ -27,8 +24,5 @@ services:
       dockerfile: Dockerfile.bot
     image: unnos-bot
     command: /bin/bash -c "bunx prisma migrate deploy; bun run start:bot"
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
       - DATABASE_URL=${DATABASE_URL}
