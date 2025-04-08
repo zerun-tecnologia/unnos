@@ -40,7 +40,7 @@ services:
   postgres:
     container_name: unnos-pg
     restart: unless-stopped
-    image: postgres
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
