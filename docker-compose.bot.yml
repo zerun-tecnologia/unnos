@@ -1,21 +1,4 @@
 services:
-  web:
-    container_name: unnos-web
-    restart: unless-stopped
-    build:
-      context: .
-      dockerfile: ./web/.nixpacks/Dockerfile
-      args:
-        - DATABASE_URL=${DATABASE_URL}
-    image: unnos-web
-    environment:
-      - AUTH_TRUST_HOST=${AUTH_TRUST_HOST}
-      - AUTH_SECRET=${AUTH_SECRET}
-      - AUTH_DISCORD_ID=${AUTH_DISCORD_ID}
-      - AUTH_DISCORD_SECRET=${AUTH_DISCORD_SECRET}
-      - AUTH_URL=${AUTH_URL}
-      - DATABASE_URL=${DATABASE_URL}
-
   bot:
     container_name: unnos-bot
     restart: unless-stopped
