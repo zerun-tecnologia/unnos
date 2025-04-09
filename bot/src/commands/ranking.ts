@@ -75,25 +75,30 @@ export default {
         await interaction.reply({
           embeds: [
             {
-              title: `Ranking de ${user.username}`,
-              color: 0x0099ff,
+              title: `🏆 Ranking de ${user.username}`,
+              description: `Estatísticas do jogador **${user.username}**`,
+              color: 0x5865F2, // Discord blurple color
+              thumbnail: {
+                url: user.displayAvatarURL()
+              },
               fields: [
                 {
-                  name: 'Vitórias',
-                  value: wins.length.toString(),
+                  name: '🥇 Vitórias',
+                  value: `\`${wins.length}\``,
                   inline: true,
                 },
                 {
-                  name: 'Dadas',
-                  value: gaves.length.toString(),
+                  name: '🎁 Dadas',
+                  value: `\`${gaves.length}\``,
                   inline: true,
                 },
                 {
-                  name: 'Bans',
-                  value: bans.length.toString(),
+                  name: '🚫 Bans',
+                  value: `\`${bans.length}\``,
                   inline: true,
-                },
+                }
               ],
+              timestamp: new Date().toISOString(),
             },
           ],
           flags: [MessageFlags.Ephemeral],
@@ -133,9 +138,13 @@ export default {
       await interaction.reply({
         embeds: [
           {
-            title: 'Ranking de usuários',
-            color: 0x0099ff,
-            description: 'Vitórias | Dadas | Bans',
+            title: '🏆 Ranking de Usuários',
+            color: 0x5865F2, // Discord blurple color
+            author: {
+              name: interaction.guild.name,
+              icon_url: interaction.guild.iconURL() || undefined,
+            },
+            description: '**Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans',
             fields: ranking
               .filter((user) => {
                 return (
@@ -144,13 +153,19 @@ export default {
                   user.matches_banned.length > 0
                 )
               })
-              .map((user) => {
+              .sort((a, b) =>
+                (b.matches_winner.length + b.matches_gave.length) -
+                (a.matches_winner.length + a.matches_gave.length)
+              )
+              .map((user, index) => {
+                const medal = index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : `${index + 1}. `;
                 return {
-                  name: user.username,
-                  value: `${String(user.matches_winner.length).padEnd(3, '')} | ${String(user.matches_gave.length).padEnd(3, '')} | ${String(user.matches_banned.length).padEnd(3, '')}`,
+                  name: `${medal}${user.username}`,
+                  value: `\`${String(user.matches_winner.length).padEnd(3, ' ')}\` | \`${String(user.matches_gave.length).padEnd(3, ' ')}\` | \`${String(user.matches_banned.length).padEnd(3, ' ')}\``,
                   inline: false,
                 }
               }),
+            timestamp: new Date().toISOString(),
           },
         ],
         flags: [MessageFlags.Ephemeral],
