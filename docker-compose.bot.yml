@@ -9,23 +9,3 @@ services:
     command: /bin/bash -c "bunx prisma migrate deploy; bun run start:bot"
     environment:
       - DATABASE_URL=${DATABASE_URL}
-
-#   postgres:
-#     container_name: unnos-pg
-#     restart: unless-stopped
-#     image: postgres:17-alpine
-#     environment:
-#       POSTGRES_USER: postgres
-#       POSTGRES_PASSWORD: postgres
-#       POSTGRES_DB: postgres
-#       PGDATA: /data/postgres
-#     healthcheck:
-#       test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
-#       interval: 10s
-#       timeout: 5s
-#       retries: 5
-#     volumes:
-#       - unnos-pg:/data/postgres
-
-# volumes:
-#   unnos-pg:
