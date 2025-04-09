@@ -98,7 +98,6 @@ export default {
                   inline: true,
                 }
               ],
-              timestamp: new Date().toISOString(),
             },
           ],
           flags: [MessageFlags.Ephemeral],
@@ -140,9 +139,8 @@ export default {
           {
             title: '🏆 Ranking de Usuários',
             color: 0x5865F2, // Discord blurple color
-            author: {
-              name: interaction.guild.name,
-              icon_url: interaction.guild.iconURL() || undefined,
+            thumbnail: {
+              url: interaction.guild.iconURL() || '',
             },
             description: '**Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans',
             fields: ranking
@@ -154,8 +152,7 @@ export default {
                 )
               })
               .sort((a, b) =>
-                (b.matches_winner.length + b.matches_gave.length) -
-                (a.matches_winner.length + a.matches_gave.length)
+                b.matches_winner.length - a.matches_winner.length
               )
               .map((user, index) => {
                 const medal = index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : `${index + 1}. `;
@@ -165,7 +162,6 @@ export default {
                   inline: false,
                 }
               }),
-            timestamp: new Date().toISOString(),
           },
         ],
         flags: [MessageFlags.Ephemeral],
