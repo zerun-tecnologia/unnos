@@ -61,10 +61,11 @@ export default {
             },
           },
         }),
+        await interaction.reply({
+          content: `Partida #${latestMatch.id} limpa.`,
+        })
       ])
-      await interaction.reply({
-        content: `Partida #${latestMatch.id} limpa.`,
-      })
+    
     } catch (error) {
       console.error(error)
       await interaction.reply({

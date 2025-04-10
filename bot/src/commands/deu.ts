@@ -100,11 +100,12 @@ export default {
             },
           },
         }),
+        await interaction.reply({
+          content: `${user.username} deu a partida #${latestMatch.id}.`,
+        })
       ])
 
-      await interaction.reply({
-        content: `${user.username} deu a partida #${latestMatch.id}.`,
-      })
+     
     } catch (error) {
       console.error(error)
       await interaction.reply({

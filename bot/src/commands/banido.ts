@@ -107,10 +107,10 @@ export default {
             },
           },
         }),
+        await interaction.reply({
+          content: `${user.username} foi banido da partida #${latestMatch.id}.`,
+        })
       ])
-      await interaction.reply({
-        content: `${user.username} foi banido da partida #${latestMatch.id}.`,
-      })
     } catch (error) {
       console.error(error)
       await interaction.reply({

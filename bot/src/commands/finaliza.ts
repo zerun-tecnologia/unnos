@@ -42,19 +42,22 @@ export default {
         return
       }
 
-      await prisma.match.update({
-        where: {
-          id: lastedOpenMatch.id,
-        },
-        data: {
-          status: 'closed',
-          finishedAt: new Date(),
-        },
-      })
+      await prisma.$transaction(async (tx) => [
+        await tx.match.update({
+          where: {
+            id: lastedOpenMatch.id,
+          },
+          data: {
+            status: 'closed',
+            finishedAt: new Date(),
+          },
+        }),
+        await interaction.reply({
+          content: `Partida #${lastedOpenMatch.id} finalizada.`,
+        })
+      ])
 
-      await interaction.reply({
-        content: `Partida #${lastedOpenMatch.id} finalizada.`,
-      })
+      
     } catch (error) {
       console.error(error)
       await interaction.reply({

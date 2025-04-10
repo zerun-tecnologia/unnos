@@ -96,11 +96,12 @@ export default {
             winnerId: user.id,
           },
         }),
+        await interaction.reply({
+          content: `${user.username} venceu a partida #${latestMatch.id}.`,
+        })
       ])
 
-      await interaction.reply({
-        content: `${user.username} venceu a partida #${latestMatch.id}.`,
-      })
+      
     } catch (error) {
       console.error(error)
       await interaction.reply({
