@@ -14,10 +14,10 @@ export function MatchBansContent() {
   )
   return (
     <>
-      {match.participants.length === 0
+      {match.banned.length === 0
         ? (
             <div className="text-center p-6 bg-muted/50 rounded-lg text-muted-foreground">
-              No participants added yet
+              Nenhum banimento registrado nesta partida
             </div>
           )
         : (

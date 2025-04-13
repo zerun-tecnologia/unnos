@@ -101,3 +101,25 @@ export async function setMatchWinner(matchId: number, data: SetMatchWinnerMatchO
     },
   })
 }
+export async function setMatchBanneds(matchId: number, banneds: { id: string, amount: number }[]) {
+  const operations = banneds.map(banned =>
+    prisma.matchBanned.upsert({
+      where: {
+        matchId_userId: {
+          matchId,
+          userId: banned.id,
+        },
+      },
+      create: {
+        matchId,
+        userId: banned.id,
+        count: banned.amount,
+      },
+      update: {
+        count: banned.amount,
+      },
+    }),
+  )
+
+  await prisma.$transaction(operations)
+}

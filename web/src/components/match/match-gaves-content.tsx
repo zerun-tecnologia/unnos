@@ -15,10 +15,10 @@ export function MatchGavesContent() {
 
   return (
     <>
-      {match.participants.length === 0
+      {match.gave.length === 0
         ? (
             <div className="text-center p-6 bg-muted/50 rounded-lg text-muted-foreground">
-              No participants added yet
+               Nenhuma dada registrada nessa partida.
             </div>
           )
         : (

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { Dispatch, ReactNode, SetStateAction } from 'react'
 
 import { cn, NumberInput, useCheckbox, VisuallyHidden } from '@heroui/react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -7,7 +7,7 @@ type CustomCheckboxProps = {
   children: ReactNode
   description: string
   value: string
-  showNumberInput?: boolean
+  append?: ReactNode
 }
 
 export function CustomCheckbox(props: CustomCheckboxProps) {
@@ -22,7 +22,7 @@ export function CustomCheckbox(props: CustomCheckboxProps) {
   } = useCheckbox(props)
 
   return (
-    <div className="flex flex-col justify-center border border-default rounded-lg overflow-hidden">
+    <div className="flex flex-col justify-center border border-default rounded-lg overflow-hidden h-full">
       <Component
         {...getBaseProps()}
         className={cn(
@@ -46,30 +46,7 @@ export function CustomCheckbox(props: CustomCheckboxProps) {
           )}
         </div>
       </Component>
-      <AnimatePresence>
-        {isSelected && props.showNumberInput && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="w-full overflow-hidden"
-          >
-            <NumberInput
-              isClearable
-              className="w-full"
-              classNames={{
-                inputWrapper: 'w-full border-0 rounded-t-none border-t',
-              }}
-              defaultValue={10}
-              label="Quantidade de cartas"
-              placeholder="Enter the amount"
-              variant="bordered"
-              onClear={() => console.log('number input cleared')}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isSelected && props.append && props.append}
     </div>
   )
 }
