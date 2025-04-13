@@ -2,20 +2,23 @@
 
 import type { FormEvent } from 'react'
 
-import { addToast, Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem } from '@heroui/react'
+import { addToast, Button, Card, CardBody, CardFooter, CardHeader, CheckboxGroup, Input, Select, SelectItem, Switch } from '@heroui/react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { useReducer } from 'react'
+import { useEffect, useMemo, useReducer } from 'react'
 
-import type { CreateMatchOutput } from '@/app/validation/create-match-form-schema'
 import type { CreateMatchFormProps } from '@/reducers/match-reducer'
+import type { CreateMatchOutput } from '@/validation/create-match-form-schema'
 
 import { listGuilds } from '@/actions/guilds'
 import { createMatch } from '@/actions/match'
-import { createMatchSchema } from '@/app/validation/create-match-form-schema'
+import { fetchUsersUnpaged } from '@/actions/users'
 import { formReducer } from '@/reducers/match-reducer'
 import { matchNameGenerator } from '@/utils/match-name-generator'
+import { createMatchSchema } from '@/validation/create-match-form-schema'
+
+import { CustomCheckbox } from '../custom-checkbox'
 
 const initialFormState: CreateMatchFormProps = {
   name: {
@@ -26,17 +29,30 @@ const initialFormState: CreateMatchFormProps = {
     value: '',
     errors: [],
   },
-
+  participants: {
+    value: [],
+    errors: [],
+  },
+  selectPaticipants: false,
 }
 
 export function CreateMatchForm() {
   const { push } = useRouter()
   const [state, dispatch] = useReducer(formReducer, initialFormState)
 
-  const { data: guilds, isFetching } = useQuery({
+  const { data: guilds, isFetching: isFetchingGuilds } = useQuery({
     queryKey: ['guilds'],
     queryFn: async () => await listGuilds(),
+  })
 
+  const { data: users, isFetching: isFetchingUsers } = useQuery({
+    queryKey: ['users', state.guildId.value],
+    queryFn: async () => await fetchUsersUnpaged({
+      filters: {
+        guilds: [state.guildId.value],
+      },
+    }),
+    enabled: !!state.guildId.value,
   })
 
   const handleSubmitMutation = useMutation({
@@ -63,7 +79,7 @@ export function CreateMatchForm() {
     const { error, data } = createMatchSchema.safeParse({
       name: state.name.value,
       guildId: state.guildId.value,
-      participants: [],
+      participants: state.participants.value,
     })
 
     if (error) {
@@ -77,6 +93,11 @@ export function CreateMatchForm() {
         field: { errors: error.formErrors.fieldErrors.name },
       })
 
+      error.formErrors.fieldErrors.participants && dispatch({
+        type: 'SET_PARTICIPANTS',
+        field: { errors: error.formErrors.fieldErrors.participants },
+      })
+
       return
     }
 
@@ -84,7 +105,17 @@ export function CreateMatchForm() {
   }
 
   const guildsList = guilds || []
-  const isLoading = isFetching || handleSubmitMutation?.isPending
+  const usersList = useMemo(() => users || [], [users])
+  const isLoading = isFetchingGuilds || isFetchingUsers || handleSubmitMutation?.isPending
+
+  useEffect(() => {
+    if (state.selectPaticipants && usersList.length > 0) {
+      dispatch({
+        type: 'SET_PARTICIPANTS',
+        field: { value: usersList.map(user => user.id) },
+      })
+    }
+  }, [usersList, state.selectPaticipants])
 
   return (
     <motion.div
@@ -139,6 +170,60 @@ export function CreateMatchForm() {
               <p className="text-xs text-muted-foreground">
                 A Servidor à qual esta partida pertence
               </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex gap-2">
+                <Switch id="select-participants" onChange={() => dispatch({ type: 'TOGGLE_SELECT_PARTICIPANTS' })} />
+                <label
+                  htmlFor="select-participants"
+                  className="flex flex-col cursor-pointer"
+                >
+                  Selecionar participantes?
+                  <span className="text-xs text-muted-foreground">
+                    Se não for marcado, todos os usuários do servidor serão
+                    marcados como participantes desta partida
+                  </span>
+                </label>
+                {state.participants.errors.length > 0 && (
+                  <p className="text-xs text-destructive-foreground">
+                    {state.participants.errors.join(', ')}
+                  </p>
+                )}
+              </div>
+              {state.selectPaticipants && state.guildId && (
+                <CheckboxGroup
+                  onChange={e =>
+                    dispatch({
+                      type: 'SET_PARTICIPANTS',
+                      field: {
+                        value: e,
+                      },
+                    })}
+                  value={state.participants.value.map(item => item)}
+                >
+                  <div className="grid grid-cols-2 gap-4">
+                    <AnimatePresence>
+                      {usersList.map((user, index) => (
+                        <motion.div
+                          key={user.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ delay: index * 0.05, duration: 0.3 }}
+                        >
+                          <CustomCheckbox
+                            description={user.id}
+                            value={user.id}
+                          >
+                            {user.username}
+                          </CustomCheckbox>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                </CheckboxGroup>
+              )}
             </div>
           </CardBody>
           <CardFooter className="flex justify-between">

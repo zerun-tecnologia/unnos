@@ -5,11 +5,11 @@ import { addToast, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHea
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useReducer } from 'react'
 
-import type { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
+import type { SetMatchWinnerMatchOutput } from '@/validation/set-match-winner-form-schema'
 import type { SetWinnerFormProps } from '@/reducers/set-winner-reducer'
 
 import { setMatchWinner } from '@/actions/match'
-import { setMatchWinnerFormSchema } from '@/app/validation/set-match-winner-form-schema'
+import { setMatchWinnerFormSchema } from '@/validation/set-match-winner-form-schema'
 import { useMatch } from '@/contexts/match-context'
 import { formReducer } from '@/reducers/set-winner-reducer'
 
