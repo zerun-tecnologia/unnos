@@ -18,7 +18,7 @@ export function MatchGavesContent() {
       {match.gave.length === 0
         ? (
             <div className="text-center p-6 bg-muted/50 rounded-lg text-muted-foreground">
-               Nenhuma dada registrada nessa partida.
+              Nenhuma dada registrada nessa partida.
             </div>
           )
         : (

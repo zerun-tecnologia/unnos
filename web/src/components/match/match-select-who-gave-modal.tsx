@@ -88,8 +88,7 @@ export function SelectWhoGaveContent({ onClose }: SelectWinnerModalContentProps)
         <ModalBody className="w-full">
           <CheckboxGroup
             onValueChange={(values: string[]) =>
-              setGaves(values.map(value => ({ id: value, error: [] })))
-            }
+              setGaves(values.map(value => ({ id: value, error: [] })))}
             value={gaves.map(gave => gave.id)}
           >
             <div className="grid grid-cols-2 gap-4">

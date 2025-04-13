@@ -83,8 +83,6 @@ export async function fetchUsersUnpaged(query?: Query<UserFilters>): Promise<Eac
     },
   )
 
-  console.log('data', data)
-
   return data.map(user => ({
     ...user,
     guilds: user.guilds.map(guild => guild.id),

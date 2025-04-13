@@ -2,7 +2,7 @@
 import { addToast, Button, CheckboxGroup, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, NumberInput, useDisclosure } from '@heroui/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import type { SetMatchBannedsMatchOutput } from '@/validation/set-match-banneds-form-schema'
 

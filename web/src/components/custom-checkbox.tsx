@@ -1,7 +1,6 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react'
+import type { ReactNode } from 'react'
 
-import { cn, NumberInput, useCheckbox, VisuallyHidden } from '@heroui/react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { cn, useCheckbox, VisuallyHidden } from '@heroui/react'
 
 type CustomCheckboxProps = {
   children: ReactNode
