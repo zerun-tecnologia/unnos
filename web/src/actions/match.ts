@@ -101,6 +101,7 @@ export async function setMatchWinner(matchId: number, data: SetMatchWinnerMatchO
     },
   })
 }
+
 export async function setMatchBanneds(matchId: number, banneds: { id: string, amount: number }[]) {
   const operations = banneds.map(banned =>
     prisma.matchBanned.upsert({
@@ -122,4 +123,19 @@ export async function setMatchBanneds(matchId: number, banneds: { id: string, am
   )
 
   await prisma.$transaction(operations)
+}
+
+export async function setMatchGaves(matchId: number, gaves: string[]) {
+  await prisma.match.update({
+    where: {
+      id: matchId,
+    },
+    data: {
+      gave: {
+        connect: gaves.map(gave => ({
+          id: gave,
+        })),
+      },
+    },
+  })
 }
