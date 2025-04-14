@@ -29,36 +29,35 @@ export default {
         return
       }
 
-      const lastedOpenMatch = await prisma.match.findFirst({
-        where: {
-          guildId: guild.id,
-          status: 'open',
-        },
-      })
 
-      if (lastedOpenMatch) {
-        await prisma.match.update({
+      await prisma.$transaction(async (tx) => {
+        await tx.match.updateMany({
           where: {
-            id: lastedOpenMatch.id,
+            guildId: guild.id,
+            status: 'open',
           },
           data: {
             status: 'closed',
             finishedAt: new Date(),
           },
         })
-      }
-
-      const match = await prisma.match.create({
-        data: {
-          name: nome,
-          guildId: guild.id,
-          status: 'open',
-        },
+  
+        const match = await tx.match.create({
+          data: {
+            name: nome,
+            guildId: guild.id,
+            status: 'open',
+          },
+        })
+        
+        return [
+          await interaction.reply({
+            content: `Partida #${match.id} registrada.`,
+          })
+        ]
       })
 
-      await interaction.reply({
-        content: `Partida #${match.id} registrada.`,
-      })
+      
     } catch (error) {
       console.error(error)
       await interaction.reply({
