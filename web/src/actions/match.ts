@@ -1,8 +1,8 @@
 'use server'
 import type { Guild, MatchBanned, Prisma, Match as PrismaMatch, User } from '@prisma/client'
 
-import type { CreateMatchType } from '@/app/validation/create-match-form-schema'
-import type { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
+import type { CreateMatchType } from '@/validation/create-match-form-schema'
+import type { SetMatchWinnerMatchOutput } from '@/validation/set-match-winner-form-schema'
 
 import { prisma } from '@/lib/prisma'
 
@@ -98,6 +98,44 @@ export async function setMatchWinner(matchId: number, data: SetMatchWinnerMatchO
     },
     data: {
       winnerId: data.winnerId,
+    },
+  })
+}
+
+export async function setMatchBanneds(matchId: number, banneds: { id: string, amount: number }[]) {
+  const operations = banneds.map(banned =>
+    prisma.matchBanned.upsert({
+      where: {
+        matchId_userId: {
+          matchId,
+          userId: banned.id,
+        },
+      },
+      create: {
+        matchId,
+        userId: banned.id,
+        count: banned.amount,
+      },
+      update: {
+        count: banned.amount,
+      },
+    }),
+  )
+
+  await prisma.$transaction(operations)
+}
+
+export async function setMatchGaves(matchId: number, gaves: string[]) {
+  await prisma.match.update({
+    where: {
+      id: matchId,
+    },
+    data: {
+      gave: {
+        connect: gaves.map(gave => ({
+          id: gave,
+        })),
+      },
     },
   })
 }

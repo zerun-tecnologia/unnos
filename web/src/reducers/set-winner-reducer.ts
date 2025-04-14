@@ -1,4 +1,4 @@
-import type { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
+import type { SetMatchWinnerMatchOutput } from '@/validation/set-match-winner-form-schema'
 
 export type SetWinnerFormProps = {
 

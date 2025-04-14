@@ -5,13 +5,13 @@ import { addToast, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHea
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useReducer } from 'react'
 
-import type { SetMatchWinnerMatchOutput } from '@/app/validation/set-match-winner-form-schema'
 import type { SetWinnerFormProps } from '@/reducers/set-winner-reducer'
+import type { SetMatchWinnerMatchOutput } from '@/validation/set-match-winner-form-schema'
 
 import { setMatchWinner } from '@/actions/match'
-import { setMatchWinnerFormSchema } from '@/app/validation/set-match-winner-form-schema'
 import { useMatch } from '@/contexts/match-context'
 import { formReducer } from '@/reducers/set-winner-reducer'
+import { setMatchWinnerFormSchema } from '@/validation/set-match-winner-form-schema'
 
 import { CustomRadio } from '../custom-radio'
 
@@ -26,7 +26,7 @@ export function SelectWinnerModal() {
   const { match, isLoading } = useMatch()
 
   const openSetWinnerModal = useDisclosure()
-  const [state, dispatch] = useReducer(formReducer, initialState)
+  const [state, dispatch] = useReducer(formReducer, { ...initialState, winnerId: { ...initialState.winnerId, value: match?.winnerId ?? '' } })
   const queryClient = useQueryClient()
 
   const handleSubmitMutation = useMutation({

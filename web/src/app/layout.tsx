@@ -37,7 +37,7 @@ export default function RootLayout({
       >
         <SessionProvider>
           <Header />
-          <main className="mx-4 h-screen mt-[60px] pt-8">
+          <main className="h-screen mt-[60px] pt-8 max-w-[1400px] mx-auto">
             <Providers>
               {children}
             </Providers>

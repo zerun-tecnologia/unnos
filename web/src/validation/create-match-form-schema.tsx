@@ -3,11 +3,7 @@ import { z } from 'zod'
 export const createMatchSchema = z.object({
   name: z.string().optional(),
   guildId: z.string().min(1, { message: 'O nome do servidor é obrigatório' }),
-  participants: z.array(
-    z.object({
-      id: z.string(),
-      username: z.string(),
-    }),
+  participants: z.array(z.string(),
   ).default([]),
 })
 

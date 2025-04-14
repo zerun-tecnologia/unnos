@@ -70,29 +70,31 @@ export function MatchHeading() {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
-          className="flex flex-1 ml-12"
-        >
-
-          <div
-            className="flex items-center p-3 relative"
+        {match.winner && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
+            className="flex flex-1 ml-12"
           >
-            <Crown className="absolute inset-0 z-10 translate-x-1 fill-amber-500 rotate-[-30deg]" />
-            <Avatar className="h-10 w-10" />
-            <div className="ml-3">
-              <div className="font-medium">{match.winner?.username}</div>
-              <div className="text-xs text-muted-foreground">
-                ID:
-                {match.winner?.id}
-              </div>
-            </div>
-            <Chip className="ml-4" variant="dot" color="warning">Vencedor</Chip>
-          </div>
 
-        </motion.div>
+            <div
+              className="flex items-center p-3 relative"
+            >
+              <Crown className="absolute inset-0 z-10 translate-x-1 fill-amber-500 rotate-[-30deg]" />
+              <Avatar className="h-10 w-10" />
+              <div className="ml-3">
+                <div className="font-medium">{match.winner?.username}</div>
+                <div className="text-xs text-muted-foreground">
+                  ID:
+                  {match.winner?.id}
+                </div>
+              </div>
+              <Chip className="ml-4" variant="dot" color="warning">Vencedor</Chip>
+            </div>
+
+          </motion.div>
+        )}
         <MatchActionButtons />
       </div>
     </div>
