@@ -36,8 +36,17 @@ export default {
         await tx.match.updateMany({
           where: {
             guildId: guild.id,
-            status: 'open',
-            editorId: editor.id,
+            OR: [
+              {
+                status: 'open',
+                editorId: editor.id
+              },
+              {
+                createdAt: {
+                  lt: new Date(Date.now() - 10 * 60 * 1000) // 30 minutes ago
+                }
+              }
+            ]
           },
           data: {
             status: 'closed',

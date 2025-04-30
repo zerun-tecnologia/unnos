@@ -32,7 +32,17 @@ export default {
       const latestOpenMatch = await prisma.match.findFirst({
         where: {
           guildId: guild.id,
-          status: 'open',
+          OR: [
+            {
+              status: 'open',
+              editorId: editor.id
+            },
+            {
+              createdAt: {
+                lt: new Date(Date.now() - 10 * 60 * 1000) // 30 minutes ago
+              }
+            }
+          ]
         },
         select: {
           id: true,
