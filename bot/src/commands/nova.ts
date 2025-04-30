@@ -19,6 +19,7 @@ export default {
     unauthorizedMiddleware(interaction)
 
     try {
+      const editor = interaction.user
       const nome = interaction.options.getString('nome')
       const guild = interaction.guild
 
@@ -31,10 +32,12 @@ export default {
 
 
       await prisma.$transaction(async (tx) => {
+        await interaction.deferReply(),
         await tx.match.updateMany({
           where: {
             guildId: guild.id,
             status: 'open',
+            editorId: editor.id,
           },
           data: {
             status: 'closed',
@@ -51,7 +54,7 @@ export default {
         })
         
         return [
-          await interaction.reply({
+          await interaction.editReply({
             content: `Partida #${match.id} registrada.`,
           })
         ]

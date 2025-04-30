@@ -18,6 +18,7 @@ model User {
   matches_participant Match[]       @relation(name: "match_participants")
   matches_banned      MatchBanned[] @relation(name: "match_banned")
   matches_gave        Match[]       @relation(name: "match_gave")
+  matches_editor      Match[]       @relation(name: "match_editor" )
 }
 
 model Guild {
@@ -41,12 +42,14 @@ model Match {
   id           Int           @id @default(autoincrement())
   name         String?
   guildId      String
+  editor       User?         @relation(name: "match_editor", fields: [editorId], references: [id])
   guild        Guild         @relation(fields: [guildId], references: [id])
   participants User[]        @relation(name: "match_participants")
   banned       MatchBanned[] @relation(name: "match_banned")
   gave         User[]        @relation(name: "match_gave")
   winner       User?         @relation(name: "match_winner", fields: [winnerId], references: [id])
   winnerId     String?
+  editorId     String?
   status       String        @default("open")
   createdAt    DateTime      @default(now())
   finishedAt   DateTime?

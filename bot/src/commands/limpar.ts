@@ -16,6 +16,7 @@ export default {
     unauthorizedMiddleware(interaction)
 
     try {
+      const editor = interaction.user
       const guild = interaction.guild
 
       if (!guild) {
@@ -32,6 +33,7 @@ export default {
         },
         select: {
           id: true,
+          editor: true,
           winner: true,
           gave: true,
         },
@@ -44,7 +46,16 @@ export default {
         return
       }
 
+      if (editor.id != latestMatch.editor?.id) {
+        await interaction.reply({
+          content: "Você deve ser o editor dessa partida para conseguir alterar as informações",
+          flags: [MessageFlags.Ephemeral]
+        })
+        return
+      }
+
       await prisma.$transaction(async (tx) => [
+        await interaction.deferReply(),
         await tx.match.update({
           where: {
             id: latestMatch.id,
@@ -61,7 +72,7 @@ export default {
             },
           },
         }),
-        await interaction.reply({
+        await interaction.editReply({
           content: `Partida #${latestMatch.id} limpa.`,
         })
       ])

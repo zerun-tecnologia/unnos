@@ -19,6 +19,7 @@ export default {
     unauthorizedMiddleware(interaction)
 
     try {
+      const editor = interaction.user
       const guild = interaction.guild
 
       if (!guild) {
@@ -28,32 +29,45 @@ export default {
         return
       }
 
-      const lastedOpenMatch = await prisma.match.findFirst({
+      const latestOpenMatch = await prisma.match.findFirst({
         where: {
           guildId: guild.id,
           status: 'open',
         },
+        select: {
+          id: true,
+          editor: true
+        }
       })
 
-      if (!lastedOpenMatch) {
+      if (!latestOpenMatch) {
         await interaction.reply({
           content: 'Não há partidas abertas.',
         })
         return
       }
 
+      if (editor.id != latestOpenMatch.editor?.id) {
+        await interaction.reply({
+          content: "Você deve ser o editor dessa partida para conseguir alterar as informações",
+          flags: [MessageFlags.Ephemeral]
+        })
+        return
+      }
+
       await prisma.$transaction(async (tx) => [
+        await interaction.deferReply(),
         await tx.match.update({
           where: {
-            id: lastedOpenMatch.id,
+            id: latestOpenMatch.id,
           },
           data: {
             status: 'closed',
             finishedAt: new Date(),
           },
         }),
-        await interaction.reply({
-          content: `Partida #${lastedOpenMatch.id} finalizada.`,
+        await interaction.editReply({
+          content: `Partida #${latestOpenMatch.id} finalizada.`,
         })
       ])
 

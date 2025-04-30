@@ -22,6 +22,7 @@ export default {
     unauthorizedMiddleware(interaction)
 
     try {
+      const editor = interaction.user
       const user = interaction.options.getUser('user')
       const guild = interaction.guild
 
@@ -41,6 +42,7 @@ export default {
           id: true,
           banned: true,
           gave: true,
+          editor: true
         },
       })
 
@@ -48,6 +50,14 @@ export default {
         await interaction.reply({
           content:
             'É necessário iniciar uma partida antes de registrar uma vitória.',
+        })
+        return
+      }
+
+      if (editor.id != latestMatch.editor?.id) {
+        await interaction.reply({
+          content: "Você deve ser o editor dessa partida para conseguir alterar as informações",
+          flags: [MessageFlags.Ephemeral]
         })
         return
       }
@@ -65,6 +75,7 @@ export default {
       }
 
       await prisma.$transaction(async (tx) => [
+        await interaction.deferReply(),
         await tx.user.upsert({
           where: {
             id: user.id,
@@ -96,7 +107,7 @@ export default {
             winnerId: user.id,
           },
         }),
-        await interaction.reply({
+        await interaction.editReply({
           content: `${user.username} venceu a partida #${latestMatch.id}.`,
         })
       ])
