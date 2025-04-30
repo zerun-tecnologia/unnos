@@ -19,7 +19,6 @@ export default {
     unauthorizedMiddleware(interaction)
 
     try {
-      const editor = interaction.user
       const guild = interaction.guild
 
       if (!guild) {
@@ -33,34 +32,15 @@ export default {
         where: {
           guildId: guild.id,
           status: 'open',
-          OR: [
-            {
-              editorId: editor.id
-            },
-            {
-              createdAt: {
-                lt: new Date(Date.now() - 10 * 60 * 1000) // 30 minutes ago
-              }
-            }
-          ]
         },
         select: {
           id: true,
-          editor: true
         }
       })
 
       if (!latestOpenMatch) {
         await interaction.reply({
           content: 'Não há partidas abertas.',
-        })
-        return
-      }
-
-      if (editor.id != latestOpenMatch.editor?.id) {
-        await interaction.reply({
-          content: "Você deve ser o editor dessa partida para conseguir alterar as informações",
-          flags: [MessageFlags.Ephemeral]
         })
         return
       }
@@ -81,7 +61,7 @@ export default {
         })
       ])
 
-      
+
     } catch (error) {
       console.error(error)
       await interaction.reply({

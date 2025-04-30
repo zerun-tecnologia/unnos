@@ -32,28 +32,19 @@ export default {
 
 
       await prisma.$transaction(async (tx) => {
-        await interaction.deferReply(),
+        await interaction.deferReply()
+        
         await tx.match.updateMany({
           where: {
             guildId: guild.id,
             status: 'open',
-            OR: [
-              {
-                editorId: editor.id
-              },
-              {
-                createdAt: {
-                  lt: new Date(Date.now() - 10 * 60 * 1000) // 30 minutes ago
-                }
-              }
-            ]
           },
           data: {
             status: 'closed',
             finishedAt: new Date(),
           },
         })
-  
+
         const match = await tx.match.create({
           data: {
             name: nome,
@@ -61,7 +52,7 @@ export default {
             status: 'open',
           },
         })
-        
+
         return [
           await interaction.editReply({
             content: `Partida #${match.id} registrada.`,
@@ -69,7 +60,7 @@ export default {
         ]
       })
 
-      
+
     } catch (error) {
       console.error(error)
       await interaction.reply({
