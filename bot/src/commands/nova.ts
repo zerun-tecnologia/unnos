@@ -36,9 +36,9 @@ export default {
         await tx.match.updateMany({
           where: {
             guildId: guild.id,
+            status: 'open',
             OR: [
               {
-                status: 'open',
                 editorId: editor.id
               },
               {
