@@ -17,12 +17,6 @@ export default {
         .setDescription('Usuário que foi banido')
         .setRequired(true),
     )
-    .addIntegerOption((option) =>
-      option
-        .setName('cards')
-        .setDescription('Número de cartas')
-        .setRequired(false),
-    )
     .toJSON(),
   async execute(interaction: ChatInputCommandInteraction<CacheType>) {
     unauthorizedMiddleware(interaction)
@@ -111,9 +105,8 @@ export default {
           },
           data: {
             banned: {
-              create: {
-                userId: user.id,
-                count: interaction.options.getInteger('cards') || 0,
+              connect: {
+                id: user.id,
               },
             },
           },

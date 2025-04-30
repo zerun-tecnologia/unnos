@@ -63,7 +63,7 @@ export default {
       }
 
       const ids = [
-        ...latestMatch.banned.map((user) => user.userId),
+        ...latestMatch.banned.map(user => user.id),
         latestMatch.winner?.id,
       ]
 

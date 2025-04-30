@@ -67,7 +67,7 @@ export default {
         const bans = await prisma.match.findMany({
           where: {
             banned: {
-              some: { userId: user.id },
+              some: { id: user.id },
             },
           },
         })
@@ -96,7 +96,7 @@ export default {
                   name: '🚫 Bans',
                   value: `\`${bans.length}\``,
                   inline: true,
-                }, 
+                },
                 {
                   name: '❇️ VDB',
                   value: `\`${((wins.length * 2) / (gaves.length + bans.length)).toFixed(2)}\``,
@@ -128,7 +128,7 @@ export default {
           },
           matches_banned: {
             select: {
-              userId: true,
+              id: true,
             },
           },
           matches_gave: {
