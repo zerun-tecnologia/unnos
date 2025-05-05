@@ -15,7 +15,6 @@ model User {
   username            String  @unique
   guilds              Guild[] @relation(name: "user_guilds")
   matches_winner      Match[] @relation(name: "match_winner")
-  matches_participant Match[] @relation(name: "match_participants")
   matches_banned      Match[] @relation(name: "match_banned")
   matches_gave        Match[] @relation(name: "match_gave")
   matches_editor      Match[] @relation(name: "match_editor")
@@ -34,7 +33,6 @@ model Match {
   guildId      String
   editor       User?     @relation(name: "match_editor", fields: [editorId], references: [id])
   guild        Guild     @relation(fields: [guildId], references: [id])
-  participants User[]    @relation(name: "match_participants")
   banned       User[]    @relation(name: "match_banned")
   gave         User[]    @relation(name: "match_gave")
   winner       User?     @relation(name: "match_winner", fields: [winnerId], references: [id])
