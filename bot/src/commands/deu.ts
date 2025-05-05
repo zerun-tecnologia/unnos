@@ -54,7 +54,7 @@ export default {
         return
       }
 
-      if (user.id != latestMatch.editor?.id) {
+      if (editor.id != latestMatch.editor?.id) {
         await interaction.reply({
           content: "Você deve ser o editor dessa partida para conseguir alterar as informações",
           flags: [MessageFlags.Ephemeral]
