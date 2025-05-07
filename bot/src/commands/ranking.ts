@@ -97,11 +97,6 @@ export default {
                   value: `\`${bans.length}\``,
                   inline: true,
                 },
-                {
-                  name: '❇️ VDB',
-                  value: `\`${((wins.length * 2) / (gaves.length + bans.length)).toFixed(2)}\``,
-                  inline: true,
-                }
               ],
             },
           ],
@@ -147,7 +142,7 @@ export default {
             thumbnail: {
               url: interaction.guild.iconURL() || '',
             },
-            description: '**Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans | ❇️ VDB',
+            description: '**Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans',
             fields: ranking
               .filter((user) => {
                 return (
@@ -163,7 +158,7 @@ export default {
                 const medal = index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : `${index + 1}. `;
                 return {
                   name: `${medal}${user.username}`,
-                  value: `\`${String(user.matches_winner.length).padEnd(4, ' ')}\` | \`${String(user.matches_gave.length).padEnd(4, ' ')}\` | \`${String(user.matches_banned.length).padEnd(4, ' ')}\` | \`${((user.matches_winner.length * 2) / (user.matches_gave.length + user.matches_banned.length)).toFixed(2).padEnd(4, ' ')}\``,
+                  value: `\`${String(user.matches_winner.length).padEnd(4, ' ')}\` | \`${String(user.matches_gave.length).padEnd(4, ' ')}\` | \`${String(user.matches_banned.length).padEnd(4, ' ')}\``,
                   inline: false,
                 }
               }),
