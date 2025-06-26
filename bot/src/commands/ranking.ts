@@ -134,6 +134,27 @@ export default {
         },
       })
 
+      const sortedRanking = ranking
+        .filter((user) => {
+          return (
+            user.matches_winner.length > 0 ||
+            user.matches_gave.length > 0 ||
+            user.matches_banned.length > 0
+          )
+        })
+        .map(user => ({
+          ...user,
+          coefficient: (user.matches_winner.length * 2) / (user.matches_gave.length + user.matches_banned.length || 1) // Avoid division by zero
+        }))
+        .sort((a, b) => {
+          // First sort by number of wins
+          const winDiff = b.matches_winner.length - a.matches_winner.length;
+          if (winDiff !== 0) return winDiff;
+          
+          // If wins are equal, sort by coefficient
+          return b.coefficient - a.coefficient;
+        })
+
       await interaction.reply({
         embeds: [
           {
@@ -143,17 +164,7 @@ export default {
               url: interaction.guild.iconURL() || '',
             },
             description: '**Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans',
-            fields: ranking
-              .filter((user) => {
-                return (
-                  user.matches_winner.length > 0 ||
-                  user.matches_gave.length > 0 ||
-                  user.matches_banned.length > 0
-                )
-              })
-              .sort((a, b) =>
-                b.matches_winner.length - a.matches_winner.length
-              )
+            fields: sortedRanking
               .map((user, index) => {
                 const medal = index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : `${index + 1}. `;
                 return {
