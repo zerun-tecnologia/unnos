@@ -21,22 +21,24 @@ model User {
 }
 
 model Season {
-  id      String  @id
-  name    String
-  guildId String
-  guild   Guild   @relation(fields: [guildId], references: [id])
-  matches Match[]
+  id        String   @id @default(uuid())
+  name      String
+  guildId   String
+  guild     Guild    @relation(fields: [guildId], references: [id])
+  matches   Match[]
+  startAt   DateTime
+  endAt     DateTime
   createdAt DateTime @default(now())
 
   @@unique([name, guildId])
 }
 
 model Guild {
-  id        String   @id
-  name      String
-  matches   Match[]
-  users     User[]   @relation(name: "user_guilds")
-  seasons   Season[]
+  id      String   @id
+  name    String
+  matches Match[]
+  users   User[]   @relation(name: "user_guilds")
+  seasons Season[]
 }
 
 model Match {

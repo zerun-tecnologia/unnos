@@ -34,12 +34,15 @@ export default {
       await prisma.$transaction(async (tx) => {
         await interaction.deferReply()
 
-        const latestSeason = await tx.season.findFirst({
+        const latestSeason = await tx.season.findFirstOrThrow({
           where: {
             guildId: guild.id,
-          },
-          orderBy: {
-            createdAt: 'desc',
+            startAt: {
+              lte: new Date(),
+            },
+            endAt: {
+              gte: new Date(),
+            },
           },
         })
 

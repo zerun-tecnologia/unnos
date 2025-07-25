@@ -16,7 +16,7 @@ export default {
         .setName('user')
         .setDescription('Usuário que deseja ver o ranking')
         .setRequired(false),
-    ).addUserOption((option) =>
+    ).addNumberOption((option) =>
       option
         .setName('season')
         .setDescription('Temporada que deseja ver o ranking')
@@ -28,7 +28,7 @@ export default {
 
     try {
       const user = interaction.options.getUser('user')
-      const seasonID = interaction.options.getString('season')
+      const seasonID = interaction.options.getNumber('season')
       const guild = interaction.guild
 
       if (!guild) {
@@ -39,18 +39,27 @@ export default {
         return
       }
 
-      const season = seasonID ? await prisma.season.findFirst({
+      const season = seasonID ? await prisma.season.findFirstOrThrow({
         where: {
-          name: seasonID,
+          name: seasonID.toString(),
           guildId: guild.id,
         },
-      }) : await prisma.season.findFirst({
+      }) : await prisma.season.findFirstOrThrow({
         where: {
           guildId: guild.id,
+          startAt: {
+            lte: new Date(),
+          },
+          endAt: {
+            gte: new Date(),
+          },
         },
-        orderBy: {
-          createdAt: 'desc',
-        },
+      })
+
+      const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
       })
 
       if (user) {
@@ -99,7 +108,8 @@ export default {
           embeds: [
             {
               title: `🏆 Ranking de ${user.username} - Temporada ${season?.name}`,
-              description: `Estatísticas do jogador **${user.username}**`,
+              description: `Inicio: ${dateFormatter.format(season.startAt)} | Fim: ${dateFormatter.format(season.endAt)}\n
+              **Estatísticas do jogador ${user.username}**`,
               color: 0x5865F2, // Discord blurple color
               thumbnail: {
                 url: user.displayAvatarURL()
@@ -188,7 +198,7 @@ export default {
           // First sort by number of wins
           const winDiff = b.matches_winner.length - a.matches_winner.length;
           if (winDiff !== 0) return winDiff;
-          
+
           // If wins are equal, sort by coefficient
           return b.coefficient - a.coefficient;
         })
@@ -201,7 +211,8 @@ export default {
             thumbnail: {
               url: interaction.guild.iconURL() || '',
             },
-            description: '**Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans',
+            description: `Inicio: ${dateFormatter.format(season.startAt)} | Fim: ${dateFormatter.format(season.endAt)}\n
+              **Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans`,
             fields: sortedRanking
               .map((user, index) => {
                 const medal = index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : `${index + 1}. `;
