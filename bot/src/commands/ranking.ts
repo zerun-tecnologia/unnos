@@ -16,6 +16,11 @@ export default {
         .setName('user')
         .setDescription('Usuário que deseja ver o ranking')
         .setRequired(false),
+    ).addUserOption((option) =>
+      option
+        .setName('season')
+        .setDescription('Temporada que deseja ver o ranking')
+        .setRequired(false),
     )
     .toJSON(),
   async execute(interaction: ChatInputCommandInteraction<CacheType>) {
@@ -23,6 +28,7 @@ export default {
 
     try {
       const user = interaction.options.getUser('user')
+      const seasonID = interaction.options.getString('season')
       const guild = interaction.guild
 
       if (!guild) {
@@ -32,6 +38,20 @@ export default {
         })
         return
       }
+
+      const season = seasonID ? await prisma.season.findFirst({
+        where: {
+          name: seasonID,
+          guildId: guild.id,
+        },
+      }) : await prisma.season.findFirst({
+        where: {
+          guildId: guild.id,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      })
 
       if (user) {
         const userRanking = await prisma.user.findFirst({
@@ -51,11 +71,13 @@ export default {
         const wins = await prisma.match.findMany({
           where: {
             winnerId: user.id,
+            season: season
           },
         })
 
         const gaves = await prisma.match.findMany({
           where: {
+            season: season,
             gave: {
               some: {
                 id: user.id,
@@ -66,6 +88,7 @@ export default {
 
         const bans = await prisma.match.findMany({
           where: {
+            season: season,
             banned: {
               some: { id: user.id },
             },
@@ -75,7 +98,7 @@ export default {
         await interaction.reply({
           embeds: [
             {
-              title: `🏆 Ranking de ${user.username}`,
+              title: `🏆 Ranking de ${user.username} - Temporada ${season?.name}`,
               description: `Estatísticas do jogador **${user.username}**`,
               color: 0x5865F2, // Discord blurple color
               thumbnail: {
@@ -111,6 +134,21 @@ export default {
           guilds: {
             some: {
               id: guild.id,
+            },
+          },
+          matches_winner: {
+            some: {
+              season: season,
+            },
+          },
+          matches_gave: {
+            some: {
+              season: season,
+            },
+          },
+          matches_banned: {
+            some: {
+              season: season,
             },
           },
         },
@@ -158,7 +196,7 @@ export default {
       await interaction.reply({
         embeds: [
           {
-            title: '🏆 Ranking de Usuários',
+            title: `🏆 Ranking de Usuários - Temporada ${season?.name}`,
             color: 0x5865F2, // Discord blurple color
             thumbnail: {
               url: interaction.guild.iconURL() || '',

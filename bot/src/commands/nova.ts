@@ -34,6 +34,15 @@ export default {
       await prisma.$transaction(async (tx) => {
         await interaction.deferReply()
 
+        const latestSeason = await tx.season.findFirst({
+          where: {
+            guildId: guild.id,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        })
+
         await tx.match.updateMany({
           where: {
             guildId: guild.id,
@@ -50,7 +59,8 @@ export default {
             name: nome,
             guildId: guild.id,
             status: 'open',
-            editorId: editor.id
+            editorId: editor.id,
+            seasonId: latestSeason?.id,
           },
         })
 
