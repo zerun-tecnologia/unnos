@@ -48,10 +48,10 @@ export default {
         where: {
           guildId: guild.id,
           startAt: {
-            lte: new Date(),
+            gte: new Date(),
           },
           endAt: {
-            gte: new Date(),
+            lte: new Date(),
           },
         },
       })
