@@ -78,7 +78,7 @@ export default {
     } catch (error) {
       console.error(error)
       await interaction.reply({
-        content: 'Não foi possível registrar a vitória.',
+        content: 'Não foi possível registrar a partida.',
       })
     }
   },

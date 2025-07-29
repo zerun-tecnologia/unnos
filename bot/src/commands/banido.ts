@@ -49,7 +49,7 @@ export default {
       if (!latestMatch) {
         await interaction.reply({
           content:
-            'É necessário iniciar uma partida antes de registrar um banido.',
+            'É necessário iniciar uma partida antes de registrar banimento.',
         })
         return
       }
@@ -118,7 +118,7 @@ export default {
     } catch (error) {
       console.error(error)
       await interaction.reply({
-        content: 'Não foi possível registrar o banido.',
+        content: 'Não foi possível registrar banimento.',
       })
     }
   },
