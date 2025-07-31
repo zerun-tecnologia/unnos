@@ -1,6 +1,7 @@
 import {
   ActionRowBuilder,
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
   UserSelectMenuBuilder,
   type CacheType
@@ -83,7 +84,11 @@ export default {
         return [
           await interaction.editReply({
             content: `Partida #${match.id} registrada.`,
+          }),
+          await interaction.followUp({
+            content: 'Selecione os participantes da partida.',
             components: [row],
+            flags: [MessageFlags.Ephemeral]
           })
         ]
       })

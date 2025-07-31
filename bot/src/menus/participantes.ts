@@ -1,4 +1,5 @@
 import {
+  MessageFlags,
   UserSelectMenuInteraction,
   type CacheType
 } from 'discord.js'
@@ -34,7 +35,6 @@ export default {
         where: {
           guildId: guild.id,
           menuId: menuId,
-          status: 'open',
           editorId: editor.id,
         },
         select: {
@@ -87,6 +87,7 @@ export default {
         return [
           await interaction.reply({
             content: `Participantes atualizados com sucesso!`,
+            flags: [MessageFlags.Ephemeral]
           })
         ]
       })
@@ -94,6 +95,7 @@ export default {
       console.error(error)
       await interaction.reply({
         content: 'Não foi possível atualizar os participantes da partida.',
+        flags: [MessageFlags.Ephemeral]
       })
     }
   },
