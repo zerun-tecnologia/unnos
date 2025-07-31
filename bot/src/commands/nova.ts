@@ -118,8 +118,7 @@ export default {
           }),
           await interaction.followUp({
             content: 'Selecione os participantes da partida.',
-            components: [row],
-            flags: [MessageFlags.Ephemeral]
+            components: [row]
           })
         ]
       })
