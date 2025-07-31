@@ -53,7 +53,10 @@ export default {
               id: true
             }
           }
-        }
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
       })
 
       await prisma.$transaction(async (tx) => {
