@@ -182,6 +182,13 @@ export default {
         },
       })
 
+      const totalMatches = await prisma.match.count({
+        where: {
+          guildId: guild.id,
+          seasonId: season.id
+        }
+      })
+
       const sortedRanking = ranking
         .filter((user) => {
           return (
@@ -211,7 +218,7 @@ export default {
             thumbnail: {
               url: interaction.guild.iconURL() || '',
             },
-            description: `Inicio: ${dateFormatter.format(season.startAt)} | Fim: ${dateFormatter.format(season.endAt)}\n
+            description: `Inicio: ${dateFormatter.format(season.startAt)} | Fim: ${dateFormatter.format(season.endAt)} | Partidas: ${totalMatches}\n
               **Estatísticas dos jogadores**\n🥇 Vitórias | 🎁 Dadas | 🚫 Bans`,
             fields: sortedRanking
               .map((user, index) => {
