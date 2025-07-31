@@ -14,16 +14,12 @@ export default {
   data: new SlashCommandBuilder()
     .setName('nova')
     .setDescription('Registra uma partida')
-    .addStringOption((option) =>
-      option.setName('nome').setDescription('Nome da partida'),
-    )
     .toJSON(),
   async execute(interaction: ChatInputCommandInteraction<CacheType>) {
     unauthorizedMiddleware(interaction)
 
     try {
       const editor = interaction.user
-      const nome = interaction.options.getString('nome')
       const guild = interaction.guild
 
       if (!guild) {
@@ -100,7 +96,6 @@ export default {
 
         const match = await tx.match.create({
           data: {
-            name: nome,
             guildId: guild.id,
             menuId: menuId,
             status: 'open',

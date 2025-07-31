@@ -44,7 +44,6 @@ model Guild {
 
 model Match {
   id           Int       @id @default(autoincrement())
-  name         String?
   guildId      String
   menuId    String?
   editor       User?     @relation(name: "match_editor", fields: [editorId], references: [id])
