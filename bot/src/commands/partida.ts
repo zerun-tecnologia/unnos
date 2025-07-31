@@ -73,6 +73,11 @@ export default {
             },
             fields: [
               {
+                name: '🥇 Vencedor',
+                value: match.winner ? match.winner.username : 'Ninguém',
+                inline: true,
+              },
+              {
                 name: '📝 Editor',
                 value: match.editor?.username ?? 'Ninguém',
                 inline: true,
@@ -80,11 +85,6 @@ export default {
               {
                 name: '🌱 Temporada',
                 value: match.season ? match.season.name : 'Nenhuma',
-                inline: true,
-              },
-              {
-                name: '🥇 Vencedor',
-                value: match.winner ? match.winner.username : 'Ninguém',
                 inline: true,
               },
               {
