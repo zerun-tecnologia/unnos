@@ -33,6 +33,28 @@ export default {
         return
       }
 
+      const firstTimeOfTheDay = new Date()
+      firstTimeOfTheDay.setHours(0, 0, 0, 0)
+
+      const lastTimeOfTheDay = new Date()
+      lastTimeOfTheDay.setHours(23, 59, 59, 999)
+
+      const latestMatch = await prisma.match.findFirst({
+        where: {
+          guildId: guild.id,
+          finishedAt: {
+            gte: firstTimeOfTheDay,
+            lte: lastTimeOfTheDay,
+          },
+        },
+        select: {
+          participants: {
+            select: {
+              id: true
+            }
+          }
+        }
+      })
 
       await prisma.$transaction(async (tx) => {
         await interaction.deferReply()
@@ -43,6 +65,9 @@ export default {
           .setCustomId(menuId)
           .setPlaceholder('Selecione os participantes')
           .setMaxValues(10)
+          .addDefaultUsers(
+            latestMatch?.participants.map(user => user.id) || [],
+          )
 
         const row = new ActionRowBuilder()
           .addComponents(multiSelect);
@@ -78,6 +103,9 @@ export default {
             status: 'open',
             editorId: editor.id,
             seasonId: latestSeason?.id,
+            participants: {
+              connect: latestMatch?.participants.map(user => ({ id: user.id })) || [],
+            },
           },
         })
 
