@@ -1,11 +1,13 @@
 import {
+  ActionRowBuilder,
   ChatInputCommandInteraction,
-  MessageFlags,
   SlashCommandBuilder,
-  type CacheType,
+  UserSelectMenuBuilder,
+  type CacheType
 } from 'discord.js'
 import { prisma } from '../db'
 import { unauthorizedMiddleware } from '../middleware/unauthorized'
+import { v7 } from 'uuid'
 
 export default {
   data: new SlashCommandBuilder()
@@ -34,6 +36,16 @@ export default {
       await prisma.$transaction(async (tx) => {
         await interaction.deferReply()
 
+        const menuId = v7()
+
+        const multiSelect = new UserSelectMenuBuilder()
+          .setCustomId(menuId)
+          .setPlaceholder('Selecione os participantes')
+          .setMaxValues(10)
+
+        const row = new ActionRowBuilder()
+          .addComponents(multiSelect);
+
         const latestSeason = await tx.season.findFirstOrThrow({
           where: {
             guildId: guild.id,
@@ -61,6 +73,7 @@ export default {
           data: {
             name: nome,
             guildId: guild.id,
+            menuId: menuId,
             status: 'open',
             editorId: editor.id,
             seasonId: latestSeason?.id,
@@ -70,11 +83,10 @@ export default {
         return [
           await interaction.editReply({
             content: `Partida #${match.id} registrada.`,
+            components: [row],
           })
         ]
       })
-
-
     } catch (error) {
       console.error(error)
       await interaction.reply({

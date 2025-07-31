@@ -1,9 +1,9 @@
-import type { CacheType, ChatInputCommandInteraction } from 'discord.js'
+import type { CacheType, ChatInputCommandInteraction, UserSelectMenuInteraction } from 'discord.js'
 
 const bannedUsers: Array<string> = []
 
 export function unauthorizedMiddleware(
-  interaction: ChatInputCommandInteraction<CacheType>,
+  interaction: ChatInputCommandInteraction<CacheType> | UserSelectMenuInteraction<CacheType>,
 ) {
   if (bannedUsers.includes(interaction.user.id)) {
     interaction.reply({

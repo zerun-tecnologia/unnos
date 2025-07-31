@@ -27,6 +27,7 @@
     "discord.js": "^14.18.0",
     "discordjs-logger": "^5.0.0",
     "dotenv": "^16.4.7",
+    "uuid": "^11.1.0",
     "valibot": "^1.0.0-rc.3"
   },
   "prisma": {

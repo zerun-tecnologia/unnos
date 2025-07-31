@@ -6,6 +6,7 @@ import './rest'
 import { prisma } from './db'
 import { commands } from './commands'
 import DiscordEventHandler from 'discordjs-logger'
+import { menus } from './menus'
 
 const client = new Client({
   intents: [
@@ -67,9 +68,30 @@ client.on(Events.GuildAvailable, async (guild) => {
 })
 
 client.on(Events.InteractionCreate, async (interaction) => {
+  if (interaction.isUserSelectMenu()) {
+    try {
+      await menus.get('participantes')?.execute(interaction)
+    } catch (error) {
+      console.error(error)
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp({
+          content: 'Ocorreu um erro ao processar a seleção de usuários!',
+          flags: MessageFlags.Ephemeral,
+        })
+      } else {
+        await interaction.reply({
+          content: 'Ocorreu um erro ao processar a seleção de usuários!',
+          flags: MessageFlags.Ephemeral,
+        })
+      }
+    } finally {
+      return
+    }
+  }
+
   if (!interaction.isChatInputCommand()) return
 
-  const command = commands.get(interaction.commandName)
+  const command = commands.get(interaction.type == 2 ? interaction.commandName : 'participantes')
 
   if (!command) {
     console.error(`Nenhuma função encontrada para o comando ${interaction.commandName}`)
