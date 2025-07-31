@@ -74,38 +74,38 @@ export default {
             fields: [
               {
                 name: '🥇 Vencedor',
-                value: match.winner ? match.winner.username : 'Ninguém',
+                value: match.winner ? match.winner.username : '~',
                 inline: true,
               },
               {
                 name: '📝 Editor',
-                value: match.editor?.username ?? 'Ninguém',
+                value: match.editor?.username ?? '~',
                 inline: true,
               },
               {
                 name: '🌱 Temporada',
-                value: match.season ? match.season.name : 'Nenhuma',
+                value: match.season ? match.season.name : '~',
                 inline: true,
               },
               {
                 name: '🚫 Banidos',
                 value: match.banned.length
                   ? match.banned.map(u => `\`${u.username}\``).join(', ')
-                  : 'Ninguém',
+                  : '~',
                 inline: false,
               },
               {
                 name: '🎁 Deram',
                 value: match.gave.length
                   ? match.gave.map(u => `\`${u.username}\``).join(', ')
-                  : 'Ninguém',
+                  : '~',
                 inline: false,
               },
               {
                 name: '👥 Participantes',
                 value: match.participants.length
                   ? match.participants.map(u => `\`${u.username}\``).join(', ')
-                  : 'Ninguém',
+                  : '~',
                 inline: false,
               },
             ],
