@@ -147,18 +147,18 @@ export default {
             },
           },
           matches_winner: {
-            some: {
-              season: season,
+            every: {
+              seasonId: season.id,
             },
           },
           matches_gave: {
-            some: {
-              season: season,
+            every: {
+              seasonId: season.id,
             },
           },
           matches_banned: {
-            some: {
-              season: season,
+            every: {
+              seasonId: season.id,
             },
           },
         },
