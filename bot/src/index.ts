@@ -1,12 +1,12 @@
 import 'dotenv/config'
 
 import { env } from 'bun'
-import { ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageFlags, type CacheType } from 'discord.js'
-import './rest'
-import { prisma } from './db'
-import { commands } from './commands'
+import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js'
 import DiscordEventHandler from 'discordjs-logger'
+import { commands } from './commands'
+import { prisma } from './db'
 import { menus } from './menus'
+import './rest'
 
 const client = new Client({
   intents: [

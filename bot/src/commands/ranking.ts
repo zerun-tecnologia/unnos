@@ -6,6 +6,7 @@ import {
 } from 'discord.js'
 import { prisma } from '../db'
 import { unauthorizedMiddleware } from '../middleware/unauthorized'
+import { getSeasonStatsWithAggregation } from '../aggregation'
 
 export default {
   data: new SlashCommandBuilder()
@@ -139,48 +140,7 @@ export default {
         return
       }
 
-      const ranking = await prisma.user.findMany({
-        where: {
-          guilds: {
-            some: {
-              id: guild.id,
-            },
-          },
-          matches_winner: {
-            every: {
-              seasonId: season.id,
-            },
-          },
-          matches_gave: {
-            every: {
-              seasonId: season.id,
-            },
-          },
-          matches_banned: {
-            every: {
-              seasonId: season.id,
-            },
-          },
-        },
-        select: {
-          username: true,
-          matches_winner: {
-            select: {
-              id: true,
-            },
-          },
-          matches_banned: {
-            select: {
-              id: true,
-            },
-          },
-          matches_gave: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      })
+      const ranking = await getSeasonStatsWithAggregation(guild.id, season.id)
 
       const totalMatches = await prisma.match.count({
         where: {
@@ -192,18 +152,18 @@ export default {
       const sortedRanking = ranking
         .filter((user) => {
           return (
-            user.matches_winner.length > 0 ||
-            user.matches_gave.length > 0 ||
-            user.matches_banned.length > 0
+            user.winner > 0 ||
+            user.gave > 0 ||
+            user.banned > 0
           )
         })
         .map(user => ({
           ...user,
-          coefficient: (user.matches_winner.length * 2) / (user.matches_gave.length + user.matches_banned.length || 1) // Avoid division by zero
+          coefficient: (user.winner * 2) / (user.gave + user.banned || 1) // Avoid division by zero
         }))
         .sort((a, b) => {
           // First sort by number of wins
-          const winDiff = b.matches_winner.length - a.matches_winner.length;
+          const winDiff = b.winner - a.winner;
           if (winDiff !== 0) return winDiff;
 
           // If wins are equal, sort by coefficient
@@ -225,7 +185,7 @@ export default {
                 const medal = index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : `${index + 1}. `;
                 return {
                   name: `${medal}${user.username}`,
-                  value: `\`${String(user.matches_winner.length).padEnd(4, ' ')}\` | \`${String(user.matches_gave.length).padEnd(4, ' ')}\` | \`${String(user.matches_banned.length).padEnd(4, ' ')}\``,
+                  value: `\`${String(user.winner).padEnd(4, ' ')}\` | \`${String(user.gave).padEnd(4, ' ')}\` | \`${String(user.banned).padEnd(4, ' ')}\``,
                   inline: false,
                 }
               }),
