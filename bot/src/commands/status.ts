@@ -1,5 +1,5 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
-import { getDatabaseStatus, checkDatabaseConnection } from '../db'
+import { CommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js'
+import { checkDatabaseConnection, getDatabaseStatus } from '../db'
 
 export default {
   data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ export default {
     .setDescription('Verifica o status da conexão com o banco de dados'),
   
   async execute(interaction: CommandInteraction) {
-    await interaction.deferReply({ ephemeral: true })
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] })
     
     const isConnected = await checkDatabaseConnection()
     const status = getDatabaseStatus()
