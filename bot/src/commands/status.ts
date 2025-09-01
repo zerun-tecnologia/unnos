@@ -1,7 +1,7 @@
 import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
 import { getDatabaseStatus, checkDatabaseConnection } from '../db'
 
-module.exports = {
+export default {
   data: new SlashCommandBuilder()
     .setName('status')
     .setDescription('Verifica o status da conexão com o banco de dados'),
