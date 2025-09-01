@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js'
+import { CommandInteraction, EmbedBuilder, MessageFlags, SlashCommandBuilder } from 'discord.js'
 import { checkDatabaseConnection, getDatabaseStatus } from '../db'
 import { getBotUptime } from '../index'
 
@@ -14,14 +14,37 @@ export default {
     const status = getDatabaseStatus()
     const uptime = getBotUptime()
     
-    const statusMessage = isConnected 
-      ? '✅ Banco de dados conectado e funcionando!'
-      : `❌ Banco de dados desconectado. Tentativas de reconexão: ${status.attempts}/5`
+    // Create embed
+    const embed = new EmbedBuilder()
+      .setTitle('🤖 Status do Bot')
+      .setColor(isConnected ? 0x00ff00 : 0xff0000) // Green if connected, red if not
+      .setTimestamp()
     
-    const fullStatusMessage = `${statusMessage}\n🕐 **Uptime do bot:** ${uptime}`
+    // Database status field
+    const dbStatusText = isConnected 
+      ? '✅ Conectado e funcionando'
+      : `❌ Desconectado\nTentativas de reconexão: ${status.attempts}/5`
+    
+    embed.addFields(
+      {
+        name: '🗄️ Banco de Dados',
+        value: dbStatusText,
+        inline: true
+      },
+      {
+        name: '🕐 Uptime',
+        value: uptime,
+        inline: true
+      }
+    )
+    
+    // Add footer with additional info
+    embed.setFooter({
+      text: `Status verificado em ${new Date().toLocaleString('pt-BR')}`
+    })
     
     await interaction.editReply({
-      content: fullStatusMessage
+      embeds: [embed]
     })
   }
 }
